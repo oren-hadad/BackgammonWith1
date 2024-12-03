@@ -29,7 +29,8 @@ public class board
         locWhite[15] = 3;
         locBlack[18] = 5;
         locWhite[18] = 5;
-
+    }
+    public static void startBoard(Canvas canvas){
 
     }
 

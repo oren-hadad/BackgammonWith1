@@ -7,6 +7,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -23,17 +24,15 @@ public class BoardView extends View {
     // here ew draw the board
     // background - image
 
-    private float[] positionArray = new float[24];
+    private float[] positionArrayX = new float[24];
+    private float[] positionArrayY = new float[24];
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
-        createPositionArray(canvas);
-
+        createPositionArray(canvas); // עשינו
         drawBackground(canvas);
-
-
         drawWhite(canvas);
 
 
@@ -44,31 +43,44 @@ public class BoardView extends View {
     }
 
     private void createPositionArray(Canvas canvas) {
-        for(int i =0;i<positionArray.length/2;i++)
-        {
-            if(i<6)
-                positionArray[i] = canvas.getWidth()/13 + i*canvas.getWidth()/15;
-            else if (i>6 && i<12)
-                positionArray[i] = canvas.getWidth()/10 + i*canvas.getWidth()/15;
-            positionArray[i+12] = canvas.getWidth()/14 + i*canvas.getWidth()/10;
-
-
+        float shoreX = canvas.getWidth()/13;
+        float deltax = canvas.getWidth()/10 + canvas.getWidth()/22-shoreX;
+        float centralShoreX = canvas.getWidth()/8 + canvas.getWidth()/25;
+        for (int i = 0; i< positionArrayX.length/2; i++){
+            if (i< 6){
+                positionArrayX[11-i] = shoreX + i*deltax;
+                positionArrayX[23-i] = shoreX + i*deltax;
+            }
+            else {
+                positionArrayX[11-i] = centralShoreX + i*deltax;
+                positionArrayX[23-i] = centralShoreX + i*deltax;
+            }
+        }
+        float shoreY =canvas.getHeight()/10;
+        float deltay = canvas.getHeight()/11;
+        positionArrayY[0] = shoreY;
+        positionArrayY[1] = canvas.getHeight()/10;
+        for (int i = 0; i< positionArrayY.length/2; i++){
+               positionArrayY[i] = shoreY;
+               positionArrayY[i+12] = canvas.getHeight() - shoreY;
         }
 
+
+
     }
+
 
     private void drawWhite(Canvas canvas) {
         // map the location white, eaten white to  visual locations
 
         Paint paint = new Paint();
-        paint.setColor(Color.BLUE);  // צבע העיגול
+        paint.setColor(Color.WHITE);  // צבע העיגול
         paint.setStyle(Paint.Style.FILL);
        // this.x = x;
       //  this.y = y;
-        Soldier  soldier1 = new Soldier(getContext(),positionArray[6],100,40);
-        soldier1.draw(canvas);
-        for (int i = 0; i< positionArray.length/4; i++){
-            Soldier  soldier = new Soldier(getContext(),positionArray[i],100,40);
+
+        for (int i = 0; i< positionArrayX.length; i++){
+            Soldier  soldier = new Soldier(getContext(),positionArrayX[i],positionArrayY[i],40);
 
 
             soldier.draw(canvas);
@@ -90,6 +102,21 @@ public class BoardView extends View {
 
         d.draw(canvas);
     }
+    public  void createSoldier(Canvas canvas, int index, int color,int count){
+        for (int i = 0; i <count; i++){
+            Soldier  soldier = new Soldier(getContext(),positionArrayX[index],positionArrayY[index],40);
+            soldier.draw(canvas);
+        }
+    }
+
+    public  float[] getPositionArrayX() {
+        return positionArrayX;
+    }
+    public  float[] getPositionArrayY() {
+        return positionArrayY;
+    }
+
+
 
 
 }

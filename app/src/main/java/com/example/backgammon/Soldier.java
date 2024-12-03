@@ -10,12 +10,13 @@ public class Soldier extends View{
     private float x;
     private float y;
     private float r;
+    private int color;
 
-    public Soldier(Context context, float x, float y, float r) {
+    public Soldier(Context context, float x, float y, float r, int color) {
         super(context);
 
         paint = new Paint();
-        paint.setColor(Color.BLUE);  // צבע העיגול
+        paint.setColor(color);  // צבע העיגול
         paint.setStyle(Paint.Style.FILL);
         this.x = x;
         this.y = y;
@@ -23,15 +24,12 @@ public class Soldier extends View{
     }
 
     @Override
-    public void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        canvas.drawCircle(x, y, r, paint);
-    }
 
 
     public void draw(Canvas canvas) {
         super.draw(canvas);
         canvas.drawCircle(x, y, r, paint);
     }
+
 
 }
