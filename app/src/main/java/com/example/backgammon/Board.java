@@ -1,9 +1,6 @@
 package com.example.backgammon;
 
-import android.content.Context;
-import android.graphics.Canvas;
-
-public class board
+public class Board
 {
     private int eatenBlack;
     private int eatenWhite;
@@ -12,7 +9,7 @@ public class board
     private int exitedWhite;
     private int exitedBlack;
 
-    public board(){
+    public Board(){
         eatenBlack = 0;
         eatenWhite = 0;
         exitedWhite = 0;
@@ -30,8 +27,11 @@ public class board
         locBlack[18] = 5;
         locWhite[18] = 5;
     }
-    public static void startBoard(Canvas canvas){
-
+    public int[] getLocWhite(){
+        return locWhite;
+    }
+    public int[] getLocBlack(){
+        return locBlack;
     }
 
 

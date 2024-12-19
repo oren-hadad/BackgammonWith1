@@ -8,6 +8,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -26,23 +27,23 @@ public class BoardView extends View {
 
     private float[] positionArrayX = new float[24];
     private float[] positionArrayY = new float[24];
+    private float deltaY;
+    private float r;
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
 
-        createPositionArray(canvas); // עשינו
+        createPositionArrayY(canvas); // עשינו
+        createPositionArrayX(canvas);
         drawBackground(canvas);
         drawWhite(canvas);
-
-
-
-
-
+        createSoldier(canvas,3,-1,5 );
 
     }
 
-    private void createPositionArray(Canvas canvas) {
+    public void createPositionArrayX(Canvas canvas) {
+
         float shoreX = canvas.getWidth()/13;
         float deltax = canvas.getWidth()/10 + canvas.getWidth()/22-shoreX;
         float centralShoreX = canvas.getWidth()/8 + canvas.getWidth()/25;
@@ -56,17 +57,17 @@ public class BoardView extends View {
                 positionArrayX[23-i] = centralShoreX + i*deltax;
             }
         }
+    }
+    public void createPositionArrayY(Canvas canvas){
         float shoreY =canvas.getHeight()/10;
         float deltay = canvas.getHeight()/11;
         positionArrayY[0] = shoreY;
         positionArrayY[1] = canvas.getHeight()/10;
         for (int i = 0; i< positionArrayY.length/2; i++){
-               positionArrayY[i] = shoreY;
-               positionArrayY[i+12] = canvas.getHeight() - shoreY;
+            positionArrayY[i] = shoreY;
+            positionArrayY[i+12] = canvas.getHeight() - shoreY;
         }
-
-
-
+        r = canvas.getHeight()/25;
     }
 
 
@@ -79,15 +80,7 @@ public class BoardView extends View {
        // this.x = x;
       //  this.y = y;
 
-        for (int i = 0; i< positionArrayX.length; i++){
-            Soldier  soldier = new Soldier(getContext(),positionArrayX[i],positionArrayY[i],40);
 
-
-            soldier.draw(canvas);
-
-        }
-
-        //canvas.drawCircle(positionArray[0], 50, 40, paint);
 
 
 
@@ -104,7 +97,7 @@ public class BoardView extends View {
     }
     public  void createSoldier(Canvas canvas, int index, int color,int count){
         for (int i = 0; i <count; i++){
-            Soldier  soldier = new Soldier(getContext(),positionArrayX[index],positionArrayY[index],40);
+            Soldier  soldier = new Soldier(getContext(),positionArrayX[index] ,positionArrayY[index]+ r*count ,r,-1);
             soldier.draw(canvas);
         }
     }
@@ -117,6 +110,8 @@ public class BoardView extends View {
     }
 
 
-
-
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+    }
 }
