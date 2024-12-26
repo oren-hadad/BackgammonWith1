@@ -14,6 +14,9 @@ public class Board
         eatenWhite = 0;
         exitedWhite = 0;
         exitedBlack = 0;
+        locWhite = new int[24];
+        locBlack = new int[24];
+
         for (int i = 0; i< locWhite.length; i++){
             locWhite[i] = 0;
             locBlack[i] = 0;

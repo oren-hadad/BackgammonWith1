@@ -1,13 +1,12 @@
 package com.example.backgammon;
 
+import static com.example.backgammon.AppConsts.*;
+
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -15,8 +14,13 @@ import androidx.annotation.NonNull;
 
 public class BoardView extends View {
 
+    GameManager gameManager;
+    Board board;
     public BoardView(Context context) {
         super(context);
+
+        board = new Board();
+        gameManager = new GameManager(this, context,board);
 
 
     }
@@ -28,7 +32,7 @@ public class BoardView extends View {
     private float[] positionArrayX = new float[24];
     private float[] positionArrayY = new float[24];
     private float deltaY;
-    private float r;
+  //  private float radius;
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
@@ -38,9 +42,15 @@ public class BoardView extends View {
         createPositionArrayX(canvas);
         drawBackground(canvas);
         drawWhite(canvas);
-        createSoldier(canvas,3,-1,5 );
+        // draw the soldioes
+        //createSoldier(canvas,3,-1,5 );
+
+
+        drawSoldiers(canvas);
 
     }
+
+
 
     public void createPositionArrayX(Canvas canvas) {
 
@@ -67,7 +77,7 @@ public class BoardView extends View {
             positionArrayY[i] = shoreY;
             positionArrayY[i+12] = canvas.getHeight() - shoreY;
         }
-        r = canvas.getHeight()/25;
+        radius = canvas.getHeight()/25;
     }
 
 
@@ -95,10 +105,36 @@ public class BoardView extends View {
 
         d.draw(canvas);
     }
-    public  void createSoldier(Canvas canvas, int index, int color,int count){
+
+
+
+
+
+    private void drawSoldiers(Canvas canvas) {
+        // map the location white, eaten white to  visual locations
+        // map the location black, eaten black to  visual locations
+        for(int i = 0; i<board.getLocWhite().length; i++){
+            createSoldier(canvas,i,  Color.WHITE,Color.BLACK,board.getLocWhite()[i]);
+        }
+        for(int i = 0; i<board.getLocBlack().length; i++){
+            createSoldier(canvas,i,  Color.BLACK,Color.WHITE,board.getLocBlack()[i]);
+        }
+
+    }
+
+    public  void createSoldier(Canvas canvas, int index, int color,int borderColor,int count){
+        float j = 0;
         for (int i = 0; i <count; i++){
-            Soldier  soldier = new Soldier(getContext(),positionArrayX[index] ,positionArrayY[index]+ r*count ,r,-1);
-            soldier.draw(canvas);
+            if(i< MAX_SOLDIERS_IN_COL) {
+                Soldier soldier = new Soldier(getContext(), positionArrayX[index], positionArrayY[index] + i * radius * DISTANCE_BETWEEN_SOLDIERS, radius, color,borderColor);
+                soldier.draw(canvas);
+            }
+            else{
+                Soldier soldier = new Soldier(getContext(), positionArrayX[index] + 20, positionArrayY[index] + j * radius * DISTANCE_BETWEEN_SOLDIERS, radius, color,borderColor);
+                soldier.draw(canvas);
+                j++;
+            }
+
         }
     }
 
