@@ -16,11 +16,6 @@ public class Board
         exitedBlack = 0;
         locWhite = new int[24];
         locBlack = new int[24];
-
-        for (int i = 0; i< locWhite.length; i++){
-            locWhite[i] = 0;
-            locBlack[i] = 0;
-        }
         locBlack[0] = 2;
         locWhite[0] = 2;
         locBlack[11] = 5;
@@ -36,6 +31,8 @@ public class Board
     public int[] getLocBlack(){
         return locBlack;
     }
+
+
 
 
 

@@ -60,11 +60,11 @@ public class BoardView extends View {
         for (int i = 0; i< positionArrayX.length/2; i++){
             if (i< 6){
                 positionArrayX[11-i] = shoreX + i*deltax;
-                positionArrayX[23-i] = shoreX + i*deltax;
+                positionArrayX[12+i] = shoreX + i*deltax;
             }
             else {
                 positionArrayX[11-i] = centralShoreX + i*deltax;
-                positionArrayX[23-i] = centralShoreX + i*deltax;
+                positionArrayX[12+i] = centralShoreX + i*deltax;
             }
         }
     }
@@ -114,7 +114,7 @@ public class BoardView extends View {
         // map the location white, eaten white to  visual locations
         // map the location black, eaten black to  visual locations
         for(int i = 0; i<board.getLocWhite().length; i++){
-            createSoldier(canvas,i,  Color.WHITE,Color.BLACK,board.getLocWhite()[i]);
+            createSoldier(canvas,i,  Color.WHITE,Color.BLACK,board.getLocWhite()[23-i]);
         }
         for(int i = 0; i<board.getLocBlack().length; i++){
             createSoldier(canvas,i,  Color.BLACK,Color.WHITE,board.getLocBlack()[i]);
@@ -125,7 +125,7 @@ public class BoardView extends View {
     public  void createSoldier(Canvas canvas, int index, int color,int borderColor,int count){
         float j = 0;
         for (int i = 0; i <count; i++){
-            if(i< MAX_SOLDIERS_IN_COL) {
+           /* if(i< MAX_SOLDIERS_IN_COL) {
                 Soldier soldier = new Soldier(getContext(), positionArrayX[index], positionArrayY[index] + i * radius * DISTANCE_BETWEEN_SOLDIERS, radius, color,borderColor);
                 soldier.draw(canvas);
             }
@@ -134,9 +134,36 @@ public class BoardView extends View {
                 soldier.draw(canvas);
                 j++;
             }
+            */
+            if (index < 12) {
+                if(i< MAX_SOLDIERS_IN_COL) {
+                    Soldier soldier = new Soldier(getContext(), positionArrayX[index], positionArrayY[index] + i * radius * DISTANCE_BETWEEN_SOLDIERS, radius, color, borderColor);
+                    soldier.draw(canvas);
+                }
+                else{
+                    Soldier soldier = new Soldier(getContext(), positionArrayX[index] + 20, positionArrayY[index] + j * radius * DISTANCE_BETWEEN_SOLDIERS, radius, color,borderColor);
+                    soldier.draw(canvas);
+                    j++;
+                }
+            }
+            else{
+                if(i< MAX_SOLDIERS_IN_COL) {
+                    Soldier soldier = new Soldier(getContext(), positionArrayX[index], positionArrayY[index] - i * radius * DISTANCE_BETWEEN_SOLDIERS, radius, color, borderColor);
+                    soldier.draw(canvas);
+                }
+                else{
+                    Soldier soldier = new Soldier(getContext(), positionArrayX[index] + 20, positionArrayY[index] - j * radius * DISTANCE_BETWEEN_SOLDIERS, radius, color,borderColor);
+                    soldier.draw(canvas);
+                    j++;
+                }
+            }
+
 
         }
     }
+
+
+
 
     public  float[] getPositionArrayX() {
         return positionArrayX;
@@ -150,4 +177,11 @@ public class BoardView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         return super.onTouchEvent(event);
     }
+
+    public void NextTurnLight(float locx,float locy,int x1, int x2){
+    //לעשות תנאים למציאת המיקום והאינדס של האיבר עליו אנחנו לוחצים
+    //
+    }
+
+
 }
