@@ -38,7 +38,6 @@ public class GameManager
     public void sourceSelected(int soldierIndex,int numDice1, int numDice2) {
 
         if(board.isLegalMove(soldierIndex, soldierIndex+numDice1, turn)){
-            boardView.highlightSlot();
 
         }
 
