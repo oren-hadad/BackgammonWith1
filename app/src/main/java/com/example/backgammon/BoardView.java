@@ -37,6 +37,11 @@ public class BoardView extends View {
         drawBackground(canvas);
         drawWhite(canvas);
         drawSoldiers(canvas);
+        highlightSlot(canvas, 17);
+        highlightSlot(canvas, 19);
+        highlightSlot(canvas, 22);
+        highlightSlot(canvas, 11);
+        highlightSlot(canvas, 9);
     }
 
     public void createPositionArrayX(Canvas canvas) {
@@ -55,17 +60,19 @@ public class BoardView extends View {
 
     }
 
+
+
+
     public void createPositionArrayY(Canvas canvas) {
-        float shoreY = canvas.getHeight() / 10;
-        float deltay = canvas.getHeight() / 11;
-        positionArrayY[0] = shoreY;
-        positionArrayY[1] = canvas.getHeight() / 10;
+        float heightCanvas = canvas.getHeight();
+        float shoreY = heightCanvas / 10;
+        float deltay = heightCanvas / 11;
         for (int i = 0; i < positionArrayY.length / 2; i++) {
             positionArrayY[i] = shoreY;
             positionArrayY[i + 12] = canvas.getHeight() - shoreY;
         }
-        radius = canvas.getHeight() / 25;
-        Canvas_size_Y = canvas.getHeight()/2;
+        radius = heightCanvas / 25;
+        Canvas_size_Y = heightCanvas/2;
     }
 
     private void drawWhite(Canvas canvas) {
@@ -126,6 +133,16 @@ public class BoardView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             int soldierIndex = getSoldierTouch(event);
+
+            // if first click - pass to game manager and get possible options
+            gameManager.sourceSelected(soldierIndex);
+
+            // two consecutive clicks - if first click  and second click are the same
+            // this means it isthe destination column
+
+
+
+
             if (soldierIndex != -1) {
                 Toast.makeText(getContext(), "Clicked at: (" + soldierIndex + ")", Toast.LENGTH_SHORT).show();
                 return true;
@@ -138,7 +155,7 @@ public class BoardView extends View {
         float x = event.getX();
         float y = event.getY();
         for (int i = 0; i < 12; i++) {
-            if (x > positionArrayX[i] - radius && x < positionArrayX[i] + radius && Canvas_size_Y / 2 > y) {
+            if (x > positionArrayX[i] - radius && x < positionArrayX[i] + radius && Canvas_size_Y / 2 > y ) {
                 return i;
             } else if (x > positionArrayX[i] - radius && x < positionArrayX[i] + radius) {
                 return 23 - i;
@@ -147,6 +164,23 @@ public class BoardView extends View {
         return -1; // Return -1 if no soldier is clicked
     }
 
-    public void NextTurnLight(float locx, float locy, int x1, int x2) {
+    public void highlightSlot(Canvas canvas, int slotIndex) {
+        Paint paint = new Paint();
+        paint.setColor(Color.CYAN); // Light blue color for highlighting
+        paint.setStyle(Paint.Style.FILL);
+
+        float x = positionArrayX[slotIndex];
+        float y = 0;
+        if (slotIndex > 11) {
+            y = canvas.getHeight() - canvas.getHeight() / 25;
+        } else {
+            y = canvas.getHeight() / 25;
+        }
+
+
+        float rectWidth = radius * 1.5f;
+        float rectHeight = radius * 0.3f;
+
+        canvas.drawRect(x - rectWidth / 2, y, x + rectWidth / 2, y + rectHeight, paint); // Draw a small rectangle
     }
 }

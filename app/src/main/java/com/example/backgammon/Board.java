@@ -31,6 +31,53 @@ public class Board
     public int[] getLocBlack(){
         return locBlack;
     }
+    public int getEatenBlack(){
+        return eatenBlack;
+    }
+    public int getEatenWhite(){
+        return eatenWhite;
+    }
+    public int getExitedWhite(){
+        return exitedWhite;
+    }
+    public int getExitedBlack(){
+        return exitedBlack;
+    }
+
+    public boolean isLegalMove(int from, int to, boolean isWhite){
+        if(isWhite){
+            if(locWhite[from] > 0 && locBlack[to] < 2){
+                return true;
+            }
+        }
+        else{
+            if(locBlack[from] > 0 && locWhite[to] < 2){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void move(int from, int to, boolean isWhite){
+        if(isWhite){
+            locWhite[from]--;
+            if(locBlack[to] == 1){
+                locBlack[to] = 0;
+                eatenBlack++;
+            }
+            locWhite[to]++;
+        }
+        else{
+            locBlack[from]--;
+            if(locWhite[to] == 1){
+                locWhite[to] = 0;
+                eatenWhite++;
+            }
+            locBlack[to]++;
+        }
+    }
+
+
 
 
 
