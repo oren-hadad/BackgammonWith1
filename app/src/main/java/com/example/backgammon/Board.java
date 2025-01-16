@@ -9,6 +9,9 @@ public class Board
     private int exitedWhite;
     private int exitedBlack;
 
+    private  int[] highlightSlots = new int[24];
+
+
     public Board(){
         eatenBlack = 0;
         eatenWhite = 0;
@@ -78,12 +81,18 @@ public class Board
     }
 
 
+    public void highlightSlot(int i) {
 
+        highlightSlots[i] = 1;
+    }
 
+    public int[] getHighlightedSlot() {
+        return highlightSlots;
+    }
 
-
-
-
-
-
+    public void clearHighlights() {
+        for (int i = 0; i < highlightSlots.length; i++) {
+            highlightSlots[i] = 0;
+        }
+    }
 }

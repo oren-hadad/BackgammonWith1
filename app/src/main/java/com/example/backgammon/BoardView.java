@@ -15,8 +15,9 @@ import androidx.annotation.NonNull;
 
 public class BoardView extends View {
 
-    GameManager gameManager;
-    Board board;
+    private GameManager gameManager;
+    private Board board;
+
     public BoardView(Context context) {
         super(context);
 
@@ -31,17 +32,23 @@ public class BoardView extends View {
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
-
         createPositionArrayY(canvas);
         createPositionArrayX(canvas);
         drawBackground(canvas);
         drawWhite(canvas);
         drawSoldiers(canvas);
-        highlightSlot(canvas, 17);
-        highlightSlot(canvas, 19);
-        highlightSlot(canvas, 22);
-        highlightSlot(canvas, 11);
-        highlightSlot(canvas, 9);
+        drawHighlight(canvas);
+        
+    }
+
+    private void drawHighlight(Canvas canvas) {
+        int[] slots= board.getHighlightedSlot();
+        for (int i = 0; i < slots.length; i++) {
+            if (slots[i] ==1) {
+                highlightSlot(canvas, slots[i]);
+            }
+        }
+
     }
 
     public void createPositionArrayX(Canvas canvas) {
@@ -95,6 +102,7 @@ public class BoardView extends View {
             createSoldier(canvas, i, Color.BLACK, Color.WHITE, board.getLocBlack()[i]);
         }
     }
+
 
     public void createSoldier(Canvas canvas, int index, int color, int borderColor, int count) {
         float j = 0;
@@ -183,4 +191,5 @@ public class BoardView extends View {
 
         canvas.drawRect(x - rectWidth / 2, y, x + rectWidth / 2, y + rectHeight, paint); // Draw a small rectangle
     }
+
 }

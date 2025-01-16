@@ -9,12 +9,11 @@ import android.graphics.Color;
 public class GameManager
 {
     private Board board;
-    private boolean turn;//false = black
-
     private BoardView boardView;
     private Context context;
     private int[] arrLocWhite;
     private int[] arrLocBlack;
+    private boolean isWhite;
 
 
     public GameManager(BoardView boardView, Context context,Board board){
@@ -33,30 +32,27 @@ public class GameManager
         boardView.invalidate();
 
     }
+    public int[] Dice(){
+    return new int[]{1,2};
+    }
+    public void sourceSelected(int soldierIndex) {
 
+        board.clearHighlights();
 
-    public void sourceSelected(int soldierIndex,int numDice1, int numDice2) {
-
-        if(board.isLegalMove(soldierIndex, soldierIndex+numDice1, turn)){
-
+        int numDice1 = Dice()[0];
+        int numDice2 = Dice()[1];
+        if(board.isLegalMove(soldierIndex, soldierIndex+numDice1, isWhite)){
+            board.highlightSlot(soldierIndex+numDice1);
         }
 
 
-        else if(board.isLegalMove(soldierIndex, soldierIndex+numDice2, turn)){
-            // הזזה חוקית
-            // מעדכן את הלוח
-            // מעדכן את המיקום של החייל
-            // מעדכן את התור
-            // מעדכן את הקוביות
-            // מעדכן את המסך
+
+
+         if(board.isLegalMove(soldierIndex, soldierIndex+numDice2, isWhite)){
+
         }
-        else if(board.isLegalMove(soldierIndex, soldierIndex+numDice1+numDice2, turn)){
-            // הזזה חוקית
-            // מעדכן את הלוח
-            // מעדכן את המיקום של החייל
-            // מעדכן את התור
-            // מעדכן את הקוביות
-            // מעדכן את המסך
+         if(board.isLegalMove(soldierIndex, soldierIndex+numDice1+numDice2, isWhite)){
+
         }
         else{
             // הזזה לא חוקית
@@ -75,6 +71,13 @@ public class GameManager
         // according to dice status
 
         // call highlightSlot for each of the optional destainations
+
+        boardView.invalidate();
     }
+}
+
+
+
+
 
 
