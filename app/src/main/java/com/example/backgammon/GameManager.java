@@ -23,6 +23,7 @@ public class GameManager
         arrLocWhite = board.getLocWhite();
         arrLocBlack = board.getLocBlack();
         boardView.getPositionArrayX();
+        this.isWhite = false;
 
         // לזמן פעולה של הקוביות שקובע של מי התור ומעדכן את התור
     }
@@ -33,31 +34,25 @@ public class GameManager
 
     }
     public int[] Dice(){
-    return new int[]{1,2};
+    return new int[]{5,6};
     }
     public void sourceSelected(int soldierIndex) {
 
         board.clearHighlights();
 
-        int numDice1 = Dice()[0];
-        int numDice2 = Dice()[1];
-        if(board.isLegalMove(soldierIndex, soldierIndex+numDice1, isWhite)){
+        int numDice1 = 5;
+        int numDice2 = 6;
+        if(soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex+numDice1, isWhite)){
             board.highlightSlot(soldierIndex+numDice1);
         }
-
-
-
-
-         if(board.isLegalMove(soldierIndex, soldierIndex+numDice2, isWhite)){
+         if(soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex+numDice2, isWhite)){
+             board.highlightSlot(soldierIndex+numDice2);
 
         }
-         if(board.isLegalMove(soldierIndex, soldierIndex+numDice1+numDice2, isWhite)){
+         if(soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex+numDice1+numDice2, isWhite)){
+             board.highlightSlot(soldierIndex+numDice1+numDice2);
+        }
 
-        }
-        else{
-            // הזזה לא חוקית
-            // הודעה למשתמש
-        }
 
 
         // clear all the highlights

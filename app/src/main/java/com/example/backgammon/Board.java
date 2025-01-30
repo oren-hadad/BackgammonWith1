@@ -8,7 +8,6 @@ public class Board
     private int[] locBlack;//מיקום השחקנים השחורים (מערך מונים)0-23
     private int exitedWhite;
     private int exitedBlack;
-
     private  int[] highlightSlots = new int[24];
 
 
@@ -49,12 +48,12 @@ public class Board
 
     public boolean isLegalMove(int from, int to, boolean isWhite){
         if(isWhite){
-            if(locWhite[from] > 0 && locBlack[to] < 2){
+            if(locWhite[from] > 0 &&to < locBlack.length&&  locBlack[to] < 2){
                 return true;
             }
         }
         else{
-            if(locBlack[from] > 0 && locWhite[to] < 2){
+            if(locBlack[from] > 0 && to < locBlack.length && locWhite[to] < 2){
                 return true;
             }
         }

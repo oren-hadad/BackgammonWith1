@@ -38,6 +38,7 @@ public class BoardView extends View {
         drawWhite(canvas);
         drawSoldiers(canvas);
         drawHighlight(canvas);
+
         
     }
 
@@ -47,6 +48,7 @@ public class BoardView extends View {
             if (slots[i] ==1) {
                 highlightSlot(canvas, slots[i]);
             }
+
         }
 
     }
@@ -152,7 +154,6 @@ public class BoardView extends View {
 
 
             if (soldierIndex != -1) {
-                Toast.makeText(getContext(), "Clicked at: (" + soldierIndex + ")", Toast.LENGTH_SHORT).show();
                 return true;
             }
         }
