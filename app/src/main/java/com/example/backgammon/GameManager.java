@@ -40,8 +40,8 @@ public class GameManager
 
         board.clearHighlights();
 
-        int numDice1 = 5;
-        int numDice2 = 6;
+        int numDice1 = 2;
+        int numDice2 = 2;
         if(soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex+numDice1, isWhite)){
             board.highlightSlot(soldierIndex+numDice1);
         }
@@ -52,6 +52,16 @@ public class GameManager
          if(soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex+numDice1+numDice2, isWhite)){
              board.highlightSlot(soldierIndex+numDice1+numDice2);
         }
+         if (soldierIndex != -1 && numDice1 == numDice2){
+             if(board.isLegalMove(soldierIndex, soldierIndex+numDice1*3, isWhite)){
+                 board.highlightSlot(soldierIndex+numDice1*3);
+             }
+             if(board.isLegalMove(soldierIndex, soldierIndex+numDice1*4, isWhite)){
+                 board.highlightSlot(soldierIndex+numDice1*4);
+             }
+         }
+
+
 
 
 

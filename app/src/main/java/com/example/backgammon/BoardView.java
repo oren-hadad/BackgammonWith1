@@ -46,7 +46,7 @@ public class BoardView extends View {
         int[] slots= board.getHighlightedSlot();
         for (int i = 0; i < slots.length; i++) {
             if (slots[i] ==1) {
-                highlightSlot(canvas, slots[i]);
+                highlightSlot(canvas, i);
             }
 
         }
