@@ -48,7 +48,7 @@ public class Board
 
     public boolean isLegalMove(int from, int to, boolean isWhite){
         if(isWhite){
-            if(locWhite[from] > 0 && to < locBlack.length&&  locBlack[23 - to] < 2){
+            if(locWhite[23-from] > 0 && (23-to) < locBlack.length&&  locBlack[to] < 2){
                 return true;
             }
         }
@@ -80,9 +80,14 @@ public class Board
     }
 
 
-    public void highlightSlot(int i) {
+    public void highlightSlot(int i,boolean isWhite) {
+        if (isWhite){
+            highlightSlots[23-i] = 1;
+        }
+        else {
+            highlightSlots[i] = 1;
 
-        highlightSlots[i] = 1;
+        }
     }
 
     public int[] getHighlightedSlot() {
@@ -94,4 +99,19 @@ public class Board
             highlightSlots[i] = 0;
         }
     }
+    public boolean isNotBlack(boolean isWhite, int i) {
+        if (isWhite == true) {
+            return locBlack[23-i] >= 0;
+        }
+        return locWhite[23-i] >= 0;
+
+    }
+
+    public boolean whitePieces(int i)
+    {
+        return locWhite[23-i] > 0;
+    }
+
+
+
 }

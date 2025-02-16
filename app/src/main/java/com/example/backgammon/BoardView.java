@@ -81,7 +81,7 @@ public class BoardView extends View {
             positionArrayY[i + 12] = canvas.getHeight() - shoreY;
         }
         radius = heightCanvas / 25;
-        Canvas_size_Y = heightCanvas/2;
+        Canvas_size_Y = heightCanvas;
     }
 
     private void drawWhite(Canvas canvas) {
@@ -164,11 +164,15 @@ public class BoardView extends View {
         float x = event.getX();
         float y = event.getY();
         for (int i = 0; i < 12; i++) {
-            if (x > positionArrayX[i] - radius && x < positionArrayX[i] + radius && Canvas_size_Y / 2 > y ) {
-                return i;
-            } else if (x > positionArrayX[i] - radius && x < positionArrayX[i] + radius) {
-                return 23 - i;
+            if (x > positionArrayX[i] - radius && x < positionArrayX[i] + radius) { // x - match
+                // && Canvas_size_Y /2 > y ) {
+                // check whether up or down
+                if (Canvas_size_Y/2  > y)
+                    return i;
+                else
+                    return 23 - i;
             }
+
         }
         return -1; // Return -1 if no soldier is clicked
     }

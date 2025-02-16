@@ -23,7 +23,7 @@ public class GameManager
         arrLocWhite = board.getLocWhite();
         arrLocBlack = board.getLocBlack();
         boardView.getPositionArrayX();
-        this.isWhite = false;
+        this.isWhite = true;
 
         // לזמן פעולה של הקוביות שקובע של מי התור ומעדכן את התור
     }
@@ -42,24 +42,46 @@ public class GameManager
 
         int numDice1 = 2;
         int numDice2 = 2;
-        if(soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex+numDice1, isWhite)){
-            board.highlightSlot(soldierIndex+numDice1);
-        }
-         if(soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex+numDice2, isWhite)){
-             board.highlightSlot(soldierIndex+numDice2);
+        if ( isWhite && board.whitePieces(soldierIndex)) {
+            if ( soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex + numDice1, isWhite)) {
+                board.highlightSlot(soldierIndex - numDice1, isWhite);
+            }
+            if (soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex + numDice2, isWhite)) {
+                board.highlightSlot(soldierIndex - numDice2, isWhite);
 
+            }
+            if (soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex + numDice1 + numDice2, isWhite)) {
+                board.highlightSlot(soldierIndex - numDice1- numDice2, isWhite);
+            }
+            if (soldierIndex != -1 && numDice1 == numDice2) {
+                if (board.isLegalMove(soldierIndex, soldierIndex + numDice1 * 3, isWhite)) {
+                    board.highlightSlot(soldierIndex - numDice1 * 3, isWhite);
+                }
+                if (board.isLegalMove(soldierIndex, soldierIndex + numDice1 * 4, isWhite)) {
+                    board.highlightSlot(soldierIndex - numDice1 * 4, isWhite);
+                }
+            }
         }
-         if(soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex+numDice1+numDice2, isWhite)){
-             board.highlightSlot(soldierIndex+numDice1+numDice2);
+        else if ( isWhite == false && !board.isNotBlack(isWhite, soldierIndex)) {
+            if (soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex + numDice1, isWhite)) {
+                board.highlightSlot(soldierIndex + numDice1, isWhite);
+            }
+            if (soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex + numDice2, isWhite)) {
+                board.highlightSlot(soldierIndex + numDice2, isWhite);
+
+            }
+            if (soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex + numDice1 + numDice2, isWhite)) {
+                board.highlightSlot(soldierIndex + numDice1 + numDice2, isWhite);
+            }
+            if (soldierIndex != -1 && numDice1 == numDice2) {
+                if (board.isLegalMove(soldierIndex, soldierIndex + numDice1 * 3, isWhite)) {
+                    board.highlightSlot(soldierIndex + numDice1 * 3, isWhite);
+                }
+                if (board.isLegalMove(soldierIndex, soldierIndex + numDice1 * 4, isWhite)) {
+                    board.highlightSlot(soldierIndex + numDice1 * 4, isWhite);
+                }
+            }
         }
-         if (soldierIndex != -1 && numDice1 == numDice2){
-             if(board.isLegalMove(soldierIndex, soldierIndex+numDice1*3, isWhite)){
-                 board.highlightSlot(soldierIndex+numDice1*3);
-             }
-             if(board.isLegalMove(soldierIndex, soldierIndex+numDice1*4, isWhite)){
-                 board.highlightSlot(soldierIndex+numDice1*4);
-             }
-         }
 
 
 
