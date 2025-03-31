@@ -15,8 +15,8 @@ import androidx.annotation.NonNull;
 
 public class BoardView extends View {
 
-    GameManager gameManager;
-    Board board;
+    private GameManager gameManager;
+    private Board board;
     public BoardView(Context context) {
         super(context);
 
@@ -37,8 +37,17 @@ public class BoardView extends View {
         drawBackground(canvas);
         drawWhite(canvas);
         drawSoldiers(canvas);
+        drawHighlight(canvas);
     }
+    private void drawHighlight(Canvas canvas) {
+        int[] slots = board.getHighlightedSlot();
+        for (int i = 0; i < slots.length; i++) {
+            if (slots[i] == 1) {
+                highlightSlot(canvas, i);
+            }
 
+        }
+    }
     public void createPositionArrayX(Canvas canvas) {
         float shoreX = canvas.getWidth() / 13;
         float deltax = canvas.getWidth() / 10 + canvas.getWidth() / 22 - shoreX;
@@ -65,7 +74,7 @@ public class BoardView extends View {
             positionArrayY[i + 12] = canvas.getHeight() - shoreY;
         }
         radius = canvas.getHeight() / 25;
-        Canvas_size_Y = canvas.getHeight()/2;
+        Canvas_size_Y = canvas.getHeight();
     }
 
     private void drawWhite(Canvas canvas) {
@@ -81,10 +90,8 @@ public class BoardView extends View {
     }
 
     private void drawSoldiers(Canvas canvas) {
-        for (int i = 0; i < board.getLocWhite().length; i++) {
-            createSoldier(canvas, i, Color.WHITE, Color.BLACK, board.getLocWhite()[23 - i]);
-        }
-        for (int i = 0; i < board.getLocBlack().length; i++) {
+        for (int i = board.getLocWhite().length -1; i >= 0; i--) {
+            createSoldier(canvas, i, Color.WHITE, Color.BLACK, board.getLocWhite()[i]);
             createSoldier(canvas, i, Color.BLACK, Color.WHITE, board.getLocBlack()[i]);
         }
     }
@@ -126,8 +133,17 @@ public class BoardView extends View {
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
             int soldierIndex = getSoldierTouch(event);
+
+            // if first click - pass to game manager and get possible options
+            gameManager.sourceSelected(soldierIndex);
+
+            // two consecutive clicks - if first click  and second click are the same
+            // this means it isthe destination column
+
+
+
+
             if (soldierIndex != -1) {
-                Toast.makeText(getContext(), "Clicked at: (" + soldierIndex + ")", Toast.LENGTH_SHORT).show();
                 return true;
             }
         }
@@ -146,7 +162,24 @@ public class BoardView extends View {
         }
         return -1; // Return -1 if no soldier is clicked
     }
+    public void highlightSlot(Canvas canvas, int slotIndex) {
+        Paint paint = new Paint();
+        paint.setColor(Color.CYAN); // Light blue color for highlighting
+        paint.setStyle(Paint.Style.FILL);
 
-    public void NextTurnLight(float locx, float locy, int x1, int x2) {
+        float x = positionArrayX[slotIndex];
+        float y = 0;
+        if (slotIndex > 11) {
+            y = canvas.getHeight() - canvas.getHeight() / 25;
+        } else {
+            y = canvas.getHeight() / 25;
+        }
+
+
+        float rectWidth = radius * 1.5f;
+        float rectHeight = radius * 0.3f;
+
+        canvas.drawRect(x - rectWidth / 2, y, x + rectWidth / 2, y + rectHeight, paint); // Draw a small rectangle
     }
+
 }
