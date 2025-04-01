@@ -195,7 +195,7 @@ public class BoardView extends View
         Paint paint = new Paint();
         paint.setColor(Color.CYAN); // Light blue color for highlighting
         paint.setStyle(Paint.Style.FILL);
-
+//
         float x = positionArrayX[slotIndex];
         float y = 0;
         if (slotIndex > 11) {
