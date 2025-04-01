@@ -6,6 +6,8 @@ import static com.example.backgammon.AppConsts.radius;
 import android.content.Context;
 import android.graphics.Color;
 
+import java.util.Random;
+
 public class GameManager
 {
     private Board board;
@@ -14,7 +16,9 @@ public class GameManager
     private int[] arrLocWhite;
     private int[] arrLocBlack;
     private boolean isWhite;
-
+    private int numOfMoves=0;
+    private int moveCounter=0;
+    private int sourceIndex = -1;
 
     public GameManager(BoardView boardView, Context context,Board board){
         this.board =board;
@@ -25,6 +29,9 @@ public class GameManager
         boardView.getPositionArrayX();
         this.isWhite = true;
 
+
+        rollDice();
+
         // לזמן פעולה של הקוביות שקובע של מי התור ומעדכן את התור
     }
 
@@ -33,78 +40,116 @@ public class GameManager
         boardView.invalidate();
 
     }
-    public int[] Dice(){
-    return new int[]{5,6};
+    int first;
+    int second;
+    public int[] rollDice(){
+        Random r = new Random();
+        first= r.nextInt(6) + 1;
+         second= r.nextInt(6) + 1;
+
+        if(first==second)
+            numOfMoves = 4;
+        else
+            numOfMoves = 2;
+        return new int[]{first,second};
     }
+
+
+
     public void sourceSelected(int soldierIndex) {
 
+        sourceIndex = soldierIndex;
         board.clearHighlights();
+        if (soldierIndex == -1){
+            return;
+        }
+        int numDice1 = first;
+        int numDice2 = second;
 
-        int numDice1 = 2;
-        int numDice2 = 2;
+        int count = 0;
         if ( isWhite && board.whitePieces(soldierIndex)) {
-            if ( soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex + numDice1, isWhite)) {
-                board.highlightSlot(soldierIndex - numDice1, isWhite);
+            numOfMoves = 2;
+            if (board.isLegalMove(soldierIndex, soldierIndex + numDice1 , isWhite)) {
+                board.highlightSlot(soldierIndex, isWhite, numDice1);
+                count++;
             }
-            if (soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex + numDice2, isWhite)) {
-                board.highlightSlot(soldierIndex - numDice2, isWhite);
-
+            if (board.isLegalMove(soldierIndex, soldierIndex + numDice2, isWhite)) {
+                board.highlightSlot(soldierIndex, isWhite, numDice2);
+                count++;
             }
-            if (soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex + numDice1 + numDice2, isWhite)) {
-                board.highlightSlot(soldierIndex - numDice1- numDice2, isWhite);
+            if (count > 0 && board.isLegalMove(soldierIndex, soldierIndex + numDice1 + numDice2, isWhite)) {
+                board.highlightSlot(soldierIndex, isWhite, numDice1 + numDice2);
             }
-            if (soldierIndex != -1 && numDice1 == numDice2) {
-                if (board.isLegalMove(soldierIndex, soldierIndex + numDice1 * 3, isWhite)) {
-                    board.highlightSlot(soldierIndex - numDice1 * 3, isWhite);
+            if (numDice1 == numDice2) {
+                numOfMoves = 4;
+                if (count == 2 && board.isLegalMove( soldierIndex, soldierIndex + numDice1 * 3, isWhite)) {
+                    board.highlightSlot(soldierIndex, isWhite, numDice1*3);
                 }
-                if (board.isLegalMove(soldierIndex, soldierIndex + numDice1 * 4, isWhite)) {
-                    board.highlightSlot(soldierIndex - numDice1 * 4, isWhite);
-                }
-            }
-        }
-        else if ( isWhite == false && !board.isNotBlack(isWhite, soldierIndex)) {
-            if (soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex + numDice1, isWhite)) {
-                board.highlightSlot(soldierIndex + numDice1, isWhite);
-            }
-            if (soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex + numDice2, isWhite)) {
-                board.highlightSlot(soldierIndex + numDice2, isWhite);
-
-            }
-            if (soldierIndex != -1 && board.isLegalMove(soldierIndex, soldierIndex + numDice1 + numDice2, isWhite)) {
-                board.highlightSlot(soldierIndex + numDice1 + numDice2, isWhite);
-            }
-            if (soldierIndex != -1 && numDice1 == numDice2) {
-                if (board.isLegalMove(soldierIndex, soldierIndex + numDice1 * 3, isWhite)) {
-                    board.highlightSlot(soldierIndex + numDice1 * 3, isWhite);
-                }
-                if (board.isLegalMove(soldierIndex, soldierIndex + numDice1 * 4, isWhite)) {
-                    board.highlightSlot(soldierIndex + numDice1 * 4, isWhite);
+                if (count == 3 && board.isLegalMove(soldierIndex, soldierIndex + numDice1 * 4, isWhite)) {
+                    board.highlightSlot(soldierIndex, isWhite, numDice1*4);
                 }
             }
         }
+        else if ( !isWhite && board.isBlack(soldierIndex)) {
+            if (board.isLegalMove(soldierIndex, soldierIndex - numDice1, isWhite)) {
+                board.highlightSlot(soldierIndex, isWhite, numDice1);
+            }
+            if (board.isLegalMove(soldierIndex, soldierIndex - numDice2, isWhite)) {
+                board.highlightSlot(soldierIndex, isWhite, numDice2);
 
+            }
+            if (count > 0 && board.isLegalMove(soldierIndex, soldierIndex - numDice1 + numDice2, isWhite)) {
+                board.highlightSlot(soldierIndex, isWhite, numDice1 + numDice2);
+            }
+            if (numDice1 == numDice2) {
+                if (count == 2 && board.isLegalMove(soldierIndex, soldierIndex - numDice1 * 3, isWhite)) {
+                    board.highlightSlot(soldierIndex, isWhite, numDice1*3);
+                }
+                if (count == 3 && board.isLegalMove(soldierIndex, soldierIndex - numDice1 * 4, isWhite)) {
+                    board.highlightSlot(soldierIndex, isWhite, numDice1*4);
+                }
+            }
+        }
 
-
-
-
-        // clear all the highlights
-        // call clear highlights in game view
-
-        // we hold the dice result
-        // we know current status
-
-
-        // get the array list of optional destainations
-        // according to dice status
-
-        // call highlightSlot for each of the optional destainations
 
         boardView.invalidate();
+
+        //mobw the soldier
+    }
+
+    public int getNumOfMoves() {
+        return numOfMoves;
+    }
+
+    public void setNumOfMoves(int numOfMoves) {
+        this.numOfMoves = numOfMoves;
+    }
+
+    public int getMoveCounter() {
+        return moveCounter;
+    }
+
+    public void setMoveCounter(int moveCounter) {
+        this.moveCounter = moveCounter;
+    }
+
+    public void destinationSelected(int soldierIndex) {
+        if (board.HighlightedSlotIsOn(soldierIndex)){
+            board.move(sourceIndex, soldierIndex, isWhite);
+
+            moveCounter++;
+            if (moveCounter == numOfMoves ) {
+                isWhite = !isWhite;
+                moveCounter = 0;
+                rollDice();
+            }
+        }
+        // update the arrays
+
+        board.clearHighlights();
+        sourceIndex = -1;
+        boardView.invalidate();
+        // remove highlights???
+        // invaldate board view
     }
 }
-
-
-
-
-
-

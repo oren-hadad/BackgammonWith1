@@ -7,17 +7,20 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-public class BoardView extends View {
+public class BoardView extends View
+
+{
 
     private GameManager gameManager;
     private Board board;
-
     public BoardView(Context context) {
         super(context);
 
@@ -29,30 +32,29 @@ public class BoardView extends View {
     private float[] positionArrayY = new float[24];
     private float Canvas_size_Y = 0;
 
+
+
+
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
         super.onDraw(canvas);
+
         createPositionArrayY(canvas);
         createPositionArrayX(canvas);
         drawBackground(canvas);
         drawWhite(canvas);
         drawSoldiers(canvas);
         drawHighlight(canvas);
-
-        
     }
-
     private void drawHighlight(Canvas canvas) {
-        int[] slots= board.getHighlightedSlot();
+        int[] slots = board.getHighlightedSlot();
         for (int i = 0; i < slots.length; i++) {
-            if (slots[i] ==1) {
+            if (slots[i] == 1) {
                 highlightSlot(canvas, i);
             }
 
         }
-
     }
-
     public void createPositionArrayX(Canvas canvas) {
         float shoreX = canvas.getWidth() / 13;
         float deltax = canvas.getWidth() / 10 + canvas.getWidth() / 22 - shoreX;
@@ -69,19 +71,17 @@ public class BoardView extends View {
 
     }
 
-
-
-
     public void createPositionArrayY(Canvas canvas) {
-        float heightCanvas = canvas.getHeight();
-        float shoreY = heightCanvas / 10;
-        float deltay = heightCanvas / 11;
+        float shoreY = canvas.getHeight() / 10;
+        float deltay = canvas.getHeight() / 11;
+        positionArrayY[0] = shoreY;
+        positionArrayY[1] = canvas.getHeight() / 10;
         for (int i = 0; i < positionArrayY.length / 2; i++) {
             positionArrayY[i] = shoreY;
             positionArrayY[i + 12] = canvas.getHeight() - shoreY;
         }
-        radius = heightCanvas / 25;
-        Canvas_size_Y = heightCanvas;
+        radius = canvas.getHeight() / 25;
+        Canvas_size_Y = canvas.getHeight();
     }
 
     private void drawWhite(Canvas canvas) {
@@ -97,14 +97,11 @@ public class BoardView extends View {
     }
 
     private void drawSoldiers(Canvas canvas) {
-        for (int i = 0; i < board.getLocWhite().length; i++) {
-            createSoldier(canvas, i, Color.WHITE, Color.BLACK, board.getLocWhite()[23 - i]);
-        }
-        for (int i = 0; i < board.getLocBlack().length; i++) {
+        for (int i = board.getLocWhite().length -1; i >= 0; i--) {
+            createSoldier(canvas, i, Color.WHITE, Color.BLACK, board.getLocWhite()[i]);
             createSoldier(canvas, i, Color.BLACK, Color.WHITE, board.getLocBlack()[i]);
         }
     }
-
 
     public void createSoldier(Canvas canvas, int index, int color, int borderColor, int count) {
         float j = 0;
@@ -139,44 +136,61 @@ public class BoardView extends View {
         return positionArrayY;
     }
 
+
+
+
+
+
+    int clickCounter = 0;
+    // first click choose source
+    // second click choose destination
+    // update the board -  also the game manager moveCounter and highlight the new possible moves
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            int soldierIndex = getSoldierTouch(event);
+            clickCounter++;
 
-            // if first click - pass to game manager and get possible options
-            gameManager.sourceSelected(soldierIndex);
+            if(clickCounter%2==1) {
+                int soldierIndex = getSoldierTouch(event);
 
-            // two consecutive clicks - if first click  and second click are the same
-            // this means it isthe destination column
+                // if first click - pass to game manager and get possible options
+                gameManager.sourceSelected(soldierIndex);
+
+                // two consecutive clicks - if first click  and second click are the same
+                // this means it isthe destination column
+
+
+                if (soldierIndex != -1) {
+                    return true;
+                }
+            }
+            else // this means move
+            // check if the destination is legal = higlighted in the game manager
+            {
+                // call game manager and give index of destination
+                int soldierIndex = getSoldierTouch(event);
+                gameManager.destinationSelected(soldierIndex);
 
 
 
-
-            if (soldierIndex != -1) {
-                return true;
             }
         }
         return super.onTouchEvent(event);
     }
 
+
     private int getSoldierTouch(MotionEvent event) {
         float x = event.getX();
         float y = event.getY();
         for (int i = 0; i < 12; i++) {
-            if (x > positionArrayX[i] - radius && x < positionArrayX[i] + radius) { // x - match
-                // && Canvas_size_Y /2 > y ) {
-                // check whether up or down
-                if (Canvas_size_Y/2  > y)
-                    return i;
-                else
-                    return 23 - i;
+            if (x > positionArrayX[i] - radius && x < positionArrayX[i] + radius && Canvas_size_Y / 2 > y) {
+                return i;
+            } else if (x > positionArrayX[i] - radius && x < positionArrayX[i] + radius) {
+                return 23 - i;
             }
-
         }
         return -1; // Return -1 if no soldier is clicked
     }
-
     public void highlightSlot(Canvas canvas, int slotIndex) {
         Paint paint = new Paint();
         paint.setColor(Color.CYAN); // Light blue color for highlighting
