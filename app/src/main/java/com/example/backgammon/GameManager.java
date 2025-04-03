@@ -36,64 +36,140 @@ public class GameManager
     }
 
     public void updateGame(){
-
         boardView.invalidate();
-
     }
     int first;
     int second;
+
+
     public int[] rollDice(){
         Random r = new Random();
-        first= 1;//r.nextInt(6) + 1;
-        second= 5;//r.nextInt(6) + 1;
+        first= r.nextInt(6) + 1;
+        second= r.nextInt(6) + 1;
 
         if(first==second)
             numOfMoves = 4;
         else
             numOfMoves = 2;
+
+        if(board.isEaten(isWhite)){
+            if(board.soldierCanReturn(isWhite,first,second) == false) {
+                isWhite = !isWhite;
+                rollDice();
+            }
+        }
         return new int[]{first,second};
     }
 
+
+    //public void ExitSoldier(int soldierIndex, boolean isWhite){
+    //    if (isWhite) {
+    //        board.exitWhite(soldierIndex);
+   //         boardView.invalidate();
+   //     } else {
+   //         board.exitBlack(soldierIndex);
+   //         boardView.invalidate();
+   //     }
+   // }
 
 
     public void sourceSelected(int soldierIndex) {
 
         sourceIndex = soldierIndex;
-        board.clearHighlights();
         if (soldierIndex == -1){
+            boardView.setClickCounter(0);
             return;
         }
+        if(board.isEaten(isWhite)) {
+            if (first == second)
+                numOfMoves = 4;
+            else
+                numOfMoves = 2;
+            if (isWhite) {
+                if (board.HighlightedSlotIsOn(soldierIndex) && soldierIndex == (first - 1)) {
+                    board.returnGame(soldierIndex, isWhite);
+                    moveCounter++;
+                    first = 0;
+                    boardView.setClickCounter(0);
+                    board.clearHighlight(soldierIndex);
+
+
+                }
+                if (board.HighlightedSlotIsOn(soldierIndex) && soldierIndex == second - 1) {
+                    board.returnGame(soldierIndex, isWhite);
+                    moveCounter++;
+                    second = 0;
+                    boardView.setClickCounter(0);
+                    board.clearHighlight(soldierIndex);
+
+                }
+
+            }
+            else if (board.HighlightedSlotIsOn(soldierIndex) && 23-soldierIndex == (first - 1)) {
+                    board.returnGame(soldierIndex, isWhite);
+                    moveCounter++;
+                    first = 0;
+                    boardView.setClickCounter(0);
+                    board.clearHighlight(soldierIndex);
+                }
+                if (board.HighlightedSlotIsOn(soldierIndex) && 23-soldierIndex == second - 1) {
+                    board.returnGame(soldierIndex, isWhite);
+                    moveCounter++;
+                    second = 0;
+                    boardView.setClickCounter(0);
+                    board.clearHighlight(soldierIndex);
+
+                }
+            else {
+                    boardView.setClickCounter(0);
+                    return;
+            }
+            if (moveCounter == numOfMoves ) {
+                isWhite = !isWhite;
+                moveCounter = 0;
+                boardView.setClickCounter(0);
+                board.clearHighlights();
+                rollDice();
+
+            }
+            boardView.setClickCounter(0);
+
+            }
+
+
         int numDice1 = first;
         int numDice2 = second;
         int count = 0;
-        if ( isWhite && board.whitePieces(soldierIndex)) {
-            numOfMoves = 2;
-            if (board.isLegalMove(soldierIndex, soldierIndex + numDice1 , isWhite)) {
-                board.highlightSlot(soldierIndex, isWhite, numDice1);
-                count++;
-            }
-            if (board.isLegalMove(soldierIndex, soldierIndex + numDice2, isWhite)) {
-                board.highlightSlot(soldierIndex, isWhite, numDice2);
-                count++;
-            }
-            if (moveCounter <= 2 && count >=1 && board.isLegalMove(soldierIndex, soldierIndex + numDice1 + numDice2, isWhite)) {
-                board.highlightSlot(soldierIndex, isWhite, numDice1 + numDice2);
-                count++;
-
-
-            }
-            if (numDice1 == numDice2) {
-                numOfMoves = 4;
-                if (moveCounter <= 3 &&count == 3 &&  board.isLegalMove( soldierIndex, soldierIndex + numDice1 * 3, isWhite)) {
-                    board.highlightSlot(soldierIndex, isWhite, numDice1*3);
+            if (board.isEaten(isWhite) == false && isWhite && board.whitePieces(soldierIndex)) {
+                board.clearHighlights();
+                numOfMoves = 2;
+                if (board.isLegalMove(soldierIndex, soldierIndex + numDice1, isWhite)) {
+                    board.highlightSlot(soldierIndex, isWhite, numDice1);
                     count++;
                 }
-                if (moveCounter <=4 &&count == 4 && board.isLegalMove(soldierIndex, soldierIndex + numDice1 * 4, isWhite)) {
-                    board.highlightSlot(soldierIndex, isWhite, numDice1*4);
+                if (board.isLegalMove(soldierIndex, soldierIndex + numDice2, isWhite)) {
+                    board.highlightSlot(soldierIndex, isWhite, numDice2);
+                    count++;
+                }
+                if (moveCounter <= 2 && count >= 1 && board.isLegalMove(soldierIndex, soldierIndex + numDice1 + numDice2, isWhite)) {
+                    board.highlightSlot(soldierIndex, isWhite, numDice1 + numDice2);
+                    count++;
+
+
+                }
+                if (numDice1 == numDice2) {
+                    numOfMoves = 4;
+                    if (moveCounter <= 1 && count == 3 && board.isLegalMove(soldierIndex, soldierIndex + numDice1 * 3, isWhite)) {
+                        board.highlightSlot(soldierIndex, isWhite, numDice1 * 3);
+                        count++;
+                    }
+                    if (moveCounter == 0 && count == 4 && board.isLegalMove(soldierIndex, soldierIndex + numDice1 * 4, isWhite)) {
+                        board.highlightSlot(soldierIndex, isWhite, numDice1 * 4);
+                    }
                 }
             }
-        }
-        else if ( !isWhite && board.isBlack(soldierIndex)) {
+
+        else if (board.isEaten(isWhite) == false && !isWhite && board.isBlack(soldierIndex)) {
             numOfMoves = 2;
             if (board.isLegalMove(soldierIndex, soldierIndex - numDice1, isWhite)) {
                 board.highlightSlot(soldierIndex, isWhite, numDice1);
@@ -109,20 +185,22 @@ public class GameManager
             }
             if (numDice1 == numDice2) {
                 numOfMoves = 4;
-                if (moveCounter <=3 &&count == 3 && board.isLegalMove(soldierIndex, soldierIndex - numDice1 * 3, isWhite)) {
+                if (moveCounter <=1 &&count == 3 && board.isLegalMove(soldierIndex, soldierIndex - numDice1 * 3, isWhite)) {
                     board.highlightSlot(soldierIndex, isWhite, numDice1*3);
                 }
-                if (moveCounter <=4 &&count == 4 && board.isLegalMove(soldierIndex, soldierIndex - numDice1 * 4, isWhite)) {
+                if (moveCounter ==0 &&count == 4 && board.isLegalMove(soldierIndex, soldierIndex - numDice1 * 4, isWhite)) {
                     board.highlightSlot(soldierIndex, isWhite, numDice1*4);
                 }
             }
         }
 
 
+
         boardView.invalidate();
 
         //mobw the soldier
     }
+
 
     public int getNumOfMoves() {
         return numOfMoves;
@@ -153,7 +231,7 @@ public class GameManager
                 board.move(sourceIndex, soldierIndex, isWhite);
                 moveCounter+=2;
                 first = 0;
-                second = 0;
+                second =0;
             }
             else if (d == first){
                 board.move(sourceIndex, soldierIndex, isWhite);
@@ -166,14 +244,15 @@ public class GameManager
                 second = 0;
             }
             }
-            if (moveCounter == numOfMoves ) {
-                isWhite = !isWhite;
-                moveCounter = 0;
-                rollDice();
-            }
+
         // update the arrays
-        board.clearHighlights();
         sourceIndex = -1;
+        board.clearHighlights();
+        if (moveCounter == numOfMoves ) {
+            isWhite = !isWhite;
+            moveCounter = 0;
+            rollDice();
+        }
         boardView.invalidate();
         // remove highlights???
         // invaldate board view

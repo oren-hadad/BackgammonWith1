@@ -31,9 +31,13 @@ public class BoardView extends View
     private float[] positionArrayX = new float[24];
     private float[] positionArrayY = new float[24];
     private float Canvas_size_Y = 0;
+    private int clickCounter = 0;
 
 
 
+public void setClickCounter(int clickCounter) {
+        this.clickCounter = clickCounter;
+    }
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
@@ -141,7 +145,6 @@ public class BoardView extends View
 
 
 
-    int clickCounter = 0;
     // first click choose source
     // second click choose destination
     // update the board -  also the game manager moveCounter and highlight the new possible moves

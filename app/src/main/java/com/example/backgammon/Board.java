@@ -26,7 +26,7 @@ public class Board
         locWhite[16] = 3;
         locBlack[5] = 5;
         locWhite[18] = 5;
-        locBlack[17] = 5;
+
 
 
 
@@ -91,9 +91,13 @@ public class Board
         }
         else {
             highlightSlots[(i -  numDice)] = 1;
-
-
-
+        }
+    }
+    public void highlightSlotToReturn(boolean isWhite, int numDice) {
+        if (isWhite) {
+            highlightSlots[(numDice)] = 1;
+        } else {
+            highlightSlots[(numDice)] = 1;
         }
     }
 
@@ -105,6 +109,9 @@ public class Board
         for (int i = 0; i < highlightSlots.length; i++) {
             highlightSlots[i] = 0;
         }
+    }
+    public void clearHighlight(int i) {
+        highlightSlots[i] = 0;
     }
     public boolean isBlack( int i) {
         return locBlack[i] > 0;
@@ -127,24 +134,49 @@ public class Board
             return eatenBlack >0;
         }
     }
-    public void soldierCanReturn(boolean isWhite, int numDice1, int numDice2) {
+    public boolean soldierCanReturn(boolean isWhite, int numDice1, int numDice2) {
+        boolean canPlay = false;
         if(isWhite){
                 if(locBlack[numDice1-1] <= 1){
-                    highlightSlot(0, isWhite, numDice1-1);
+                    highlightSlotToReturn(isWhite, numDice1-1);
+                    canPlay = true;
+
                 }
                 if(locBlack[numDice2-1] <= 1){
-                    highlightSlot(0, isWhite, numDice2);
+                    highlightSlotToReturn(isWhite, numDice2-1);
+                    canPlay = true;
                 }
 
         }
         else{
-            if(locBlack[24- numDice1] <= 1){
-                highlightSlot(0, isWhite, numDice1-1);
+            if(locWhite[24- numDice1] <= 1){
+                highlightSlotToReturn(isWhite, 24-numDice1);
+                canPlay = true;
             }
-            if(locBlack[24-numDice2] <= 1){
-                highlightSlot(0, isWhite, numDice2);
+            if(locWhite[24-numDice2] <= 1){
+                highlightSlotToReturn(isWhite, 24-numDice2);
+                canPlay = true;
             }
 
+        }
+        return canPlay;
+    }
+    public void returnGame( int to, boolean isWhite){
+        if(isWhite){
+            eatenWhite--;
+            if(locBlack[to] == 1){
+                locBlack[to] = 0;
+                eatenBlack++;
+            }
+            locWhite[to]++;
+        }
+        else{
+            eatenBlack--;
+            if(locWhite[to] == 1){
+                locWhite[to] = 0;
+                eatenWhite++;
+            }
+            locBlack[to]++;
         }
     }
 
