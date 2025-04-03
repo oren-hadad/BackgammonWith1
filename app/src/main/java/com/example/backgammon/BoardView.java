@@ -7,13 +7,17 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.drawable.Drawable;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-public class BoardView extends View {
+public class BoardView extends View
+
+{
 
     private GameManager gameManager;
     private Board board;
@@ -27,6 +31,9 @@ public class BoardView extends View {
     private float[] positionArrayX = new float[24];
     private float[] positionArrayY = new float[24];
     private float Canvas_size_Y = 0;
+
+
+
 
     @Override
     protected void onDraw(@NonNull Canvas canvas) {
@@ -129,26 +136,48 @@ public class BoardView extends View {
         return positionArrayY;
     }
 
+
+
+
+
+
+    int clickCounter = 0;
+    // first click choose source
+    // second click choose destination
+    // update the board -  also the game manager moveCounter and highlight the new possible moves
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            int soldierIndex = getSoldierTouch(event);
+            clickCounter++;
 
-            // if first click - pass to game manager and get possible options
-            gameManager.sourceSelected(soldierIndex);
+            if(clickCounter%2==1) {
+                int soldierIndex = getSoldierTouch(event);
 
-            // two consecutive clicks - if first click  and second click are the same
-            // this means it isthe destination column
+                // if first click - pass to game manager and get possible options
+                gameManager.sourceSelected(soldierIndex);
+
+                // two consecutive clicks - if first click  and second click are the same
+                // this means it isthe destination column
+
+
+                if (soldierIndex != -1) {
+                    return true;
+                }
+            }
+            else // this means move
+            // check if the destination is legal = higlighted in the game manager
+            {
+                // call game manager and give index of destination
+                int soldierIndex = getSoldierTouch(event);
+                gameManager.destinationSelected(soldierIndex);
 
 
 
-
-            if (soldierIndex != -1) {
-                return true;
             }
         }
         return super.onTouchEvent(event);
     }
+
 
     private int getSoldierTouch(MotionEvent event) {
         float x = event.getX();
@@ -166,7 +195,7 @@ public class BoardView extends View {
         Paint paint = new Paint();
         paint.setColor(Color.CYAN); // Light blue color for highlighting
         paint.setStyle(Paint.Style.FILL);
-
+//
         float x = positionArrayX[slotIndex];
         float y = 0;
         if (slotIndex > 11) {

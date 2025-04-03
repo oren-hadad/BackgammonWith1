@@ -26,6 +26,8 @@ public class Board
         locWhite[16] = 3;
         locBlack[5] = 5;
         locWhite[18] = 5;
+        locBlack[17] = 5;
+
 
 
     }
@@ -49,12 +51,12 @@ public class Board
     }
     public boolean isLegalMove(int from, int to, boolean isWhite){
         if(isWhite){
-            if(locWhite[from] > 0 && to < locBlack.length&&  locBlack[to] < 2){
+            if(from >=0&& locWhite[from] > 0 && to < locBlack.length&&  locBlack[to] < 2){
                 return true;
             }
         }
         else{
-            if(locBlack[from] > 0 && to < locBlack.length && locWhite[to] < 2){
+            if(to >=0&& locBlack[from] > 0 && to < locBlack.length && locWhite[to] < 2){
                 return true;
             }
         }
@@ -81,8 +83,11 @@ public class Board
 
 
     public void highlightSlot(int i,boolean isWhite, int numDice) {
+        if (numDice == 0){
+         return;
+        }
         if (isWhite){
-                highlightSlots[(i +  numDice)] = 1;
+            highlightSlots[(i +  numDice)] = 1;
         }
         else {
             highlightSlots[(i -  numDice)] = 1;
@@ -102,13 +107,45 @@ public class Board
         }
     }
     public boolean isBlack( int i) {
-      return locBlack[i] > 0;
+        return locBlack[i] > 0;
 
     }
 
     public boolean whitePieces(int i)
     {
         return locWhite[i] > 0;
+    }
+    public boolean HighlightedSlotIsOn(int i) {
+
+        return i >=0&& highlightSlots[i] == 1;
+    }
+    public boolean isEaten(boolean isWhite) {
+        if( isWhite){
+            return eatenWhite >0;
+        }
+        else{
+            return eatenBlack >0;
+        }
+    }
+    public void soldierCanReturn(boolean isWhite, int numDice1, int numDice2) {
+        if(isWhite){
+                if(locBlack[numDice1-1] <= 1){
+                    highlightSlot(0, isWhite, numDice1-1);
+                }
+                if(locBlack[numDice2-1] <= 1){
+                    highlightSlot(0, isWhite, numDice2);
+                }
+
+        }
+        else{
+            if(locBlack[24- numDice1] <= 1){
+                highlightSlot(0, isWhite, numDice1-1);
+            }
+            if(locBlack[24-numDice2] <= 1){
+                highlightSlot(0, isWhite, numDice2);
+            }
+
+        }
     }
 
 
