@@ -18,6 +18,7 @@ public class Board
         exitedBlack = 0;
         locWhite = new int[24];
         locBlack = new int[24];
+
         locBlack[23] = 2;
         locWhite[0] = 2;
         locBlack[12] = 5;
@@ -26,6 +27,17 @@ public class Board
         locWhite[16] = 3;
         locBlack[5] = 5;
         locWhite[18] = 5;
+//        locBlack[0] = 3;
+//        locWhite[22] = 3;
+//        locBlack[1] = 5;
+//        locWhite[23] = 5;
+//        locBlack[2] = 5;
+//        locBlack[3] = 5;
+//        locWhite[21] = 5;
+//        locWhite[20] = 5;
+
+
+
 
 
 
@@ -99,6 +111,7 @@ public class Board
         } else {
             highlightSlots[(numDice)] = 1;
         }
+
     }
 
     public int[] getHighlightedSlot() {
@@ -133,6 +146,12 @@ public class Board
         else{
             return eatenBlack >0;
         }
+    }
+    public int getWhiteEaten() {
+        return eatenWhite;
+    }
+    public int getBlackEaten() {
+        return eatenBlack;
     }
     public boolean soldierCanReturn(boolean isWhite, int numDice1, int numDice2) {
         boolean canPlay = false;
@@ -179,6 +198,75 @@ public class Board
             locBlack[to]++;
         }
     }
+    public boolean canExit(boolean isWhite) {
+        if (isWhite) {
+            // עבור לבנים - אם יש אכולים, לא יכולים לצאת
+            if (eatenWhite > 0) {
+                return false;
+            }
+            // בודק שכל השחקנים הלבנים נמצאים בבית (מיקומים 18-23)
+            for (int i = 0; i <= 17; i++) {
+                if (locWhite[i] > 0) {
+                    return false;
+                }
+            }
+        } else {
+            // עבור שחורים - אם יש אכולים, לא יכולים לצאת
+            if (eatenBlack > 0) {
+                return false;
+            }
+            // בודק שכל השחקנים השחורים נמצאים בבית (מיקומים 0-5)
+            for (int i = 6; i < locBlack.length; i++) {
+                if (locBlack[i] > 0) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    public void exit(boolean isWhite, int index){
+        if (isWhite) {
+            locWhite[index]--;
+            exitedWhite++;
+        } else {
+            locBlack[index]--;
+            exitedBlack++;
+        }
+    }
+    public boolean hasSoldiersBehindWhite(int soldierIndex) {
+        for (int i = 18 ; i < soldierIndex; i++) {
+            if (locWhite[i] > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public boolean hasSoldiersBehindBlack(int soldierIndex) {
+        // עבור שחקנים שחורים - בודק אם יש שחקנים במיקומים גבוהים יותר (רחוק יותר מהבית)
+        for (int i = soldierIndex + 1; i < locBlack.length; i++) {
+            if (locBlack[i] > 0) {
+                return true;
+            }
+        }
+        return false;
+    }
+    public int nextWhiteSoldier(int soldierIndex) {
+        for (int i = soldierIndex + 1; i < locWhite.length; i++) {
+            if (locWhite[i] > 0) {
+                return i;
+            }
+        }
+        return 23; // No soldier found
+    }
+    public int nextBlackSoldier(int soldierIndex) {
+        for (int i = soldierIndex + 1; i < locBlack.length; i++) {
+            if (locBlack[i] > 0) {
+                return i;
+            }
+        }
+        return -1; // No soldier found
+    }
+
 
 
 

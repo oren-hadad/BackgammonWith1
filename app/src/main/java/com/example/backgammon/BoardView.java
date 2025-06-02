@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -21,21 +22,25 @@ public class BoardView extends View
 
     private GameManager gameManager;
     private Board board;
-    public BoardView(Context context) {
+    public BoardView(Context context, FrameLayout gameContainer) {
         super(context);
 
         board = new Board();
-        gameManager = new GameManager(this, context,board);
+        gameManager = new GameManager(this, context,board, gameContainer);
     }
 
     private float[] positionArrayX = new float[24];
     private float[] positionArrayY = new float[24];
     private float Canvas_size_Y = 0;
     private int clickCounter = 0;
+    private float eatenWhiteX, eatenWhiteY;
+    private float eatenBlackX, eatenBlackY;
+    private float exitedWhiteX, exitedWhiteY;
+    private float exitedBlackX, exitedBlackY;
 
 
 
-public void setClickCounter(int clickCounter) {
+    public void setClickCounter(int clickCounter) {
         this.clickCounter = clickCounter;
     }
 
@@ -48,7 +53,10 @@ public void setClickCounter(int clickCounter) {
         drawBackground(canvas);
         drawWhite(canvas);
         drawSoldiers(canvas);
+        drawEatenSoldiers(canvas);
+        drawExitedSoldiers(canvas); // הוספת קריאה לציור החיילים שיצאו
         drawHighlight(canvas);
+
     }
     private void drawHighlight(Canvas canvas) {
         int[] slots = board.getHighlightedSlot();
@@ -72,12 +80,20 @@ public void setClickCounter(int clickCounter) {
                 positionArrayX[12 + i] = centralShoreX + i * deltax;
             }
         }
+        eatenWhiteX = canvas.getWidth() /2;
+        eatenBlackX = canvas.getWidth()/2 ;
+
+        // הגדרת המיקומים של החיילים שיצאו - בקצוות הלוח
+        exitedWhiteX = canvas.getWidth() - canvas.getWidth() / 50; // קצה ימין
+        exitedBlackX = canvas.getWidth() / 50; // קצה שמאל
 
     }
 
     public void createPositionArrayY(Canvas canvas) {
         float shoreY = canvas.getHeight() / 10;
         float deltay = canvas.getHeight() / 11;
+        eatenWhiteY = canvas.getHeight() / 2 + canvas.getHeight() / 8;
+        eatenBlackY = canvas.getHeight() / 2 - canvas.getHeight() / 8;
         positionArrayY[0] = shoreY;
         positionArrayY[1] = canvas.getHeight() / 10;
         for (int i = 0; i < positionArrayY.length / 2; i++) {
@@ -86,6 +102,10 @@ public void setClickCounter(int clickCounter) {
         }
         radius = canvas.getHeight() / 25;
         Canvas_size_Y = canvas.getHeight();
+
+        // הגדרת מיקום Y עבור החיילים שיצאו - באמצע הגובה
+        exitedWhiteY = canvas.getHeight() / 4;
+        exitedBlackY = canvas.getHeight()- canvas.getHeight() / 4;
     }
 
     private void drawWhite(Canvas canvas) {
@@ -139,8 +159,6 @@ public void setClickCounter(int clickCounter) {
     public float[] getPositionArrayY() {
         return positionArrayY;
     }
-
-
 
 
 
@@ -212,6 +230,35 @@ public void setClickCounter(int clickCounter) {
         float rectHeight = radius * 0.3f;
 
         canvas.drawRect(x - rectWidth / 2, y, x + rectWidth / 2, y + rectHeight, paint); // Draw a small rectangle
+    }
+    // הוסף פונקציה חדשה ב-BoardView
+    private void drawEatenSoldiers(Canvas canvas) {
+        // צייר חיילים לבנים אכולים - בטור יורד (כיוון חיובי של Y)
+        for (int i = 0; i < board.getEatenWhite(); i++) {
+            Soldier soldier = new Soldier(getContext(), eatenWhiteX, eatenWhiteY + i * radius , radius * 0.8f, Color.WHITE, Color.RED);
+            soldier.draw(canvas);
+        }
+
+        // צייר חיילים שחורים אכולים - בטור עולה (כיוון שלילי של Y)
+        for (int i = 0; i < board.getEatenBlack(); i++) {
+            Soldier soldier = new Soldier(getContext(), eatenBlackX, eatenBlackY - i * radius, radius * 0.8f, Color.BLACK, Color.RED);
+            soldier.draw(canvas);
+        }
+    }
+
+    // פונקציה חדשה לציור החיילים שיצאו מהמשחק
+    private void drawExitedSoldiers(Canvas canvas) {
+        // צייר חיילים לבנים שיצאו - בטור יורד (בקצה ימין של הלוח)
+        for (int i = 0; i < board.getExitedWhite(); i++) {
+            Soldier soldier = new Soldier(getContext(), exitedWhiteX, exitedWhiteY + i * radius +0.9f , radius * 0.7f, Color.WHITE, Color.GREEN);
+            soldier.draw(canvas);
+        }
+
+        // צייר חיילים שחורים שיצאו - בטור עולה (בקצה שמאל של הלוח)
+        for (int i = 0; i < board.getExitedBlack(); i++) {
+            Soldier soldier = new Soldier(getContext(), exitedBlackX, exitedBlackY - i * radius *1f, radius * 0.7f, Color.BLACK, Color.GREEN);
+            soldier.draw(canvas);
+        }
     }
 
 }
