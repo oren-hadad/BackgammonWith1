@@ -5,6 +5,7 @@ import static com.example.backgammon.AppConsts.radius;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.os.CountDownTimer;
 import android.widget.FrameLayout;
 
 import java.util.Random;
@@ -34,7 +35,19 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
 
         // יצירת תצוגת הקוביות
 
-        rollDice();
+        CountDownTimer timer = new CountDownTimer(3000, 1000) {
+            @Override
+            public void onTick(long l) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                rollDice();
+            }
+        };
+        timer.start();
+
 
 //        if (diceRollingView.getParent() == null) {
 //            gameContainer.addView(diceRollingView);
@@ -64,6 +77,18 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
             numOfMoves = 4;
         else
             numOfMoves = 2;
+        if(diceRollingView == null) {
+
+            diceRollingView = new DiceRollingSurfaceView(context)  ;
+            diceRollingView.setAnimationListener(this);
+
+        }
+        diceRollingView.setDiceValues(first,second);
+
+        ;
+        if (diceRollingView.getParent() == null) {
+            gameContainer.addView(diceRollingView);
+        }
 
         if(board.isEaten(isWhite)){
             if(board.soldierCanReturn(isWhite,first,second) == false) {
@@ -72,8 +97,11 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
             }
             else{
                 boardView.invalidate();
+
+
             }
         }
+
         return new int[]{first,second};
     }
 
@@ -262,20 +290,10 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
         board.clearHighlights();
         rollDice();
 
-        if(diceRollingView == null) {
 
-                diceRollingView = new DiceRollingSurfaceView(context)  ;
-                diceRollingView.setAnimationListener(this);
-
-            }
-
-      ;
-        if (diceRollingView.getParent() == null) {
-            gameContainer.addView(diceRollingView);
-        }
 
         // 3. Start the animation
-        diceRollingView.startAnimationSequence(first, second);
+    //    diceRollingView.startAnimationSequence(first, second);
 
 
     }

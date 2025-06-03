@@ -20,6 +20,12 @@ public class DiceRollingSurfaceView extends SurfaceView implements SurfaceHolder
     private int finalDie1Index;
     private int finalDie2Index;
 
+    public void setDiceValues(int first, int second) {
+
+        this.finalDie1Index = first-1;
+        this.finalDie2Index = second-1;
+    }
+
     public interface DiceAnimationListener {
         void onDiceAnimationFinished();
     }
@@ -54,7 +60,7 @@ public class DiceRollingSurfaceView extends SurfaceView implements SurfaceHolder
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        //      startDropAnimation();
+             startDropAnimation();
     }
 
     @Override
@@ -173,6 +179,8 @@ public class DiceRollingSurfaceView extends SurfaceView implements SurfaceHolder
                     e.printStackTrace();
                 }
             }
+
+            notifyAnimationFinished();
         }
 
         public void stopDrawing() {
@@ -223,13 +231,13 @@ public class DiceRollingSurfaceView extends SurfaceView implements SurfaceHolder
 
             // Simulate rolling duration
             try {
-                Thread.sleep(150); // Adjust the time between dice face changes
+                Thread.sleep(100); // Adjust the time between dice face changes
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
 
             // Stop rolling after a set duration (e.g., 3 seconds)
-            if (!isDropping && System.currentTimeMillis() % 3000 < 150) {
+            if (!isDropping && System.currentTimeMillis() % 3000 < 100) {
                 stopDrawing();
             }
         }

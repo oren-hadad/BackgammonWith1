@@ -8,10 +8,10 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="PLACEHOLDER" />
-                  <option name="mobileSdkAppId" value="" />
-                  <option name="projectId" value="" />
-                  <option name="projectNumber" value="" />
+                  <option name="appId" value="com.example.backgammon" />
+                  <option name="mobileSdkAppId" value="1:63634911055:android:3c98d2772a58258b2b5f3a" />
+                  <option name="projectId" value="backgammon-78f8d" />
+                  <option name="projectNumber" value="63634911055" />
                 </ConnectionSetting>
               </option>
               <option name="signal" value="SIGNAL_UNSPECIFIED" />

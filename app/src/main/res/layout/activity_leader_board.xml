@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#212121"
+    android:padding="24dp">
+
+    <!-- Title -->
+    <TextView
+        android:id="@+id/leaderboardTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Leaderboard"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#FFECB3"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- Container -->
+    <LinearLayout
+        android:id="@+id/leaderboardContainer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="24dp"
+        app:layout_constraintTop_toBottomOf="@id/leaderboardTitle"
+        app:layout_constraintBottom_toTopOf="@id/backButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- 🥇 1st Place -->
+        <TextView
+            android:id="@+id/player1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🥇 1st - "
+            android:background="#CFD8DC"
+            android:textColor="#212121"
+            android:textStyle="bold"
+            android:textSize="22sp"
+            android:padding="12dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- 🥈 2nd Place -->
+        <TextView
+            android:id="@+id/player2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🥈 2nd - "
+            android:background="#B0BEC5"
+            android:textColor="#212121"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:padding="10dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- 🥉 3rd Place -->
+        <TextView
+            android:id="@+id/player3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="🥉 3rd - "
+            android:background="#90A4AE"
+            android:textColor="#FFFFFF"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:padding="10dp"
+            android:layout_marginBottom="8dp" />
+
+        <!-- 4th -->
+        <TextView
+            android:id="@+id/player4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="4th - "
+            android:textColor="#BDBDBD"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:layout_marginBottom="4dp" />
+
+        <!-- 5th -->
+        <TextView
+            android:id="@+id/player5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="5th - "
+            android:textColor="#BDBDBD"
+            android:textSize="16sp"
+            android:padding="8dp"
+            android:layout_marginBottom="4dp" />
+
+    </LinearLayout>
+
+    <!-- Back Button -->
+    <Button
+        android:id="@+id/backButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Back"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#616161"
+        android:padding="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

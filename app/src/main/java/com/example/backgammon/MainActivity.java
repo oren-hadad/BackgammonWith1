@@ -12,10 +12,17 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static  String otherPLayerEmail = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
+
+
+        otherPLayerEmail = getIntent().getStringExtra("otherPlayerEmail");
+            // not solo
+            // do something with otherPlayerEmail
+
 
 
         // 1. Create the FrameLayout
