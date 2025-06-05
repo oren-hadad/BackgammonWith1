@@ -14,8 +14,8 @@ public class Board
     public Board(){
         eatenBlack = 0;
         eatenWhite = 0;
-        exitedWhite = 13;
-        exitedBlack = 13;
+        exitedWhite = 0;
+        exitedBlack = 0;
         locWhite = new int[24];
         locBlack = new int[24];
         locBlack[23] = 2;
