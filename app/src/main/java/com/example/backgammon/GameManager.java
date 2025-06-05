@@ -7,6 +7,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.os.CountDownTimer;
 import android.widget.FrameLayout;
+import android.content.Intent;
 
 import java.util.Random;
 
@@ -20,16 +21,14 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
     private int moveCounter=0;
     private int sourceIndex = -1;
     private FrameLayout gameContainer;
-
     private DiceRollingSurfaceView diceRollingView;
-
 
     public GameManager(BoardView boardView, Context context,Board board, FrameLayout gameContainer) {
         this.board =board;
         this.boardView = boardView;
         this.context = context;
         boardView.getPositionArrayX();
-        this.isWhite = true;
+        this.isWhite = false;
         this.gameContainer = gameContainer;
 
 
@@ -43,7 +42,7 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
 
             @Override
             public void onFinish() {
-                rollDice();
+                startGame();
             }
         };
         timer.start();
@@ -97,11 +96,8 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
             }
             else{
                 boardView.invalidate();
-
-
             }
         }
-
         return new int[]{first,second};
     }
 
@@ -123,6 +119,13 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
         if (board.canExit(isWhite)) {
             // ניסיון להוציא שחקן
             if (tryToExitSoldier(soldierIndex)) {
+                if(board.isGameOver(isWhite)){
+                    // אם המשחק נגמר, צריך להודיע על כך
+                    Intent intent = new Intent(context, endGame.class);
+                    intent.putExtra("winner", isWhite ? "White" : "Black");
+                    context.startActivity(intent);
+                    board = new Board(); // איפוס הלוח למשחק חדש
+                }
                 return; // אם הצלחנו להוציא, לא צריך לעשות כלום נוסף
             }
             // אם לא הצלחנו להוציא, ממשיכים למשחק רגיל
@@ -279,7 +282,6 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
                 }
             }
         }
-
         boardView.invalidate();
     }
 
@@ -290,12 +292,8 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
         board.clearHighlights();
         rollDice();
 
-
-
         // 3. Start the animation
     //    diceRollingView.startAnimationSequence(first, second);
-
-
     }
 
     // פונקציה שבודקת אם השחקן יכול לבצע מהלך כלשהו עם הקוביות שנותרו
@@ -413,7 +411,7 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
                 moveCounter++;
 
                 // בדיקה אם התור הסתיים
-                if (moveCounter == numOfMoves) {
+                if (moveCounter == numOfMoves&& !board.isGameOver(true)) {
                     endTurn();
                 } else {
                     board.clearHighlights();
@@ -433,7 +431,7 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
             first = 0; // "משתמשים" בקובייה
 
             // בדיקה אם התור הסתיים
-            if (moveCounter == numOfMoves) {
+            if (moveCounter == numOfMoves&& !board.isGameOver(true)) {
                 endTurn();
             } else {
                 board.clearHighlights();
@@ -450,7 +448,7 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
             second = 0; // "משתמשים" בקובייה
 
             // בדיקה אם התור הסתיים
-            if (moveCounter == numOfMoves) {
+            if (moveCounter == numOfMoves&& !board.isGameOver(true)) {
                 endTurn();
             } else {
                 board.clearHighlights();
@@ -468,7 +466,7 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
                 moveCounter++;
                 first = 0;
 
-                if (moveCounter == numOfMoves) {
+                if (moveCounter == numOfMoves&& !board.isGameOver(true)) {
                     endTurn();
                 } else {
                     board.clearHighlights();
@@ -484,7 +482,7 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
                 moveCounter++;
                 second = 0;
 
-                if (moveCounter == numOfMoves) {
+                if (moveCounter == numOfMoves&& !board.isGameOver(true)) {
                     endTurn();
                 } else {
                     board.clearHighlights();
@@ -494,14 +492,9 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
                 return true;
             }
         }
-
         // לא הצלחנו להוציא את השחקן
         return false;
     }
-
-    /**
-     * ניסיון להוציא שחקן שחור
-     */
     private boolean tryToExitBlackSoldier(int soldierIndex) {
         // בדיקה שיש שחקן שחור במקום הזה
         if (!board.isBlack(soldierIndex)) {
@@ -520,7 +513,7 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
                 moveCounter++;
 
                 // בדיקה אם התור הסתיים
-                if (moveCounter == numOfMoves) {
+                if (moveCounter == numOfMoves&& !board.isGameOver(false)) {
                     endTurn();
                 } else {
                     board.clearHighlights();
@@ -538,7 +531,7 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
             moveCounter++;
             first = 0;
 
-            if (moveCounter == numOfMoves) {
+            if (moveCounter == numOfMoves && !board.isGameOver(false)) {
                 endTurn();
             } else {
                 board.clearHighlights();
@@ -554,7 +547,7 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
             moveCounter++;
             second = 0;
 
-            if (moveCounter == numOfMoves) {
+            if (moveCounter == numOfMoves&& !board.isGameOver(false)) {
                 endTurn();
             } else {
                 board.clearHighlights();
@@ -571,8 +564,7 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
                 board.exit(false, soldierIndex); // false = שחקן שחור
                 moveCounter++;
                 first = 0;
-
-                if (moveCounter == numOfMoves) {
+                if (moveCounter == numOfMoves&& !board.isGameOver(false)) {
                     endTurn();
                 } else {
                     board.clearHighlights();
@@ -581,14 +573,12 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
                 boardView.invalidate();
                 return true;
             }
-
             // בודק אם קובייה שנייה גבוהה מהמרחק הנדרש
             if (second > distanceToExit && second > 0) {
                 board.exit(false, soldierIndex); // false = שחקן שחור
                 moveCounter++;
                 second = 0;
-
-                if (moveCounter == numOfMoves) {
+                if (moveCounter == numOfMoves&& !board.isGameOver(false)) {
                     endTurn();
                 } else {
                     board.clearHighlights();
@@ -599,8 +589,18 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
             }
         }
 
+
         // לא הצלחנו להוציא את השחקן
         return false;
+    }
+    public void startGame(){//הגרלת קוביות ראשונות ואם הקובייה הראשונה גדולה מהשנייה השחקן הלבן יתחיל
+        rollDice();
+        if(first == second){
+            rollDice();
+        }
+        if(first > second) {
+            isWhite = true;
+        }
     }
 
     @Override
@@ -608,8 +608,5 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
         if (gameContainer != null && diceRollingView != null) {
             gameContainer.removeView(diceRollingView);
         }
-
-
-
     }
 }

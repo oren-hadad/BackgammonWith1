@@ -1,6 +1,5 @@
 package com.example.backgammon;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -12,30 +11,39 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class leader_board extends AppCompatActivity {
+public class endGame extends AppCompatActivity {
 
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_leader_board);
+        setContentView(R.layout.activity_end_game);
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
 
-        // חיבור כפתור Back
-        Button backButton = findViewById(R.id.backButton);
+        // חיבור הכפתורים לפי ה-ID שלהם
+        Button chooseModeButton = findViewById(R.id.chooseModeButton);
+        Button leaderboardButton = findViewById(R.id.leaderboardButton);
 
-        // מאזין ללחיצה על כפתור Back
-        backButton.setOnClickListener(new View.OnClickListener() {
+        // מאזין ללחיצה על Choose Mode
+        chooseModeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(leader_board.this, endGame.class);
+                Intent intent = new Intent(endGame.this, GameModeSelectionActivity.class);
                 startActivity(intent);
-                finish(); // סגירת המחלקה הנוכחית
+            }
+        });
+
+        // מאזין ללחיצה על Leaderboard
+        leaderboardButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(endGame.this, leader_board.class);
+                startActivity(intent);
             }
         });
     }

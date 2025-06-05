@@ -89,27 +89,6 @@ public class DiceRollingSurfaceView extends SurfaceView implements SurfaceHolder
     }
 
     // NEW PUBLIC METHOD: This is what GameManager will call
-    public void startAnimationSequence(int die1Value, int die2Value) {
-        Log.d("DiceView", "startAnimationSequence called with: " + die1Value + ", " + die2Value);
-        this.finalDie1Index = die1Value - 1; // Convert 1-6 to 0-5
-        this.finalDie2Index = die2Value - 1; // Convert 1-6 to 0-5
-
-        // Now, call your existing startDropAnimation method to do the work
-        // Ensure view has dimensions before proceeding with calculations in startDropAnimation
-        if (getWidth() > 0 && getHeight() > 0) {
-            startDropAnimation();
-        } else {
-            // If view isn't ready, we might need to defer this.
-            // For simplicity now, we'll log and it might rely on a subsequent call
-            // or a check within surfaceCreated/Changed to trigger if pending.
-            // A more robust solution would queue this request.
-            Log.w("DiceView", "View not ready when startAnimationSequence called. Animation might not start correctly or immediately.");
-            // One strategy: set a flag and check in surfaceCreated/Changed
-            // pendingAnimationDie1 = die1Value;
-            // pendingAnimationDie2 = die2Value;
-            // needsToStartAnimation = true;
-        }
-    }
 
 
 

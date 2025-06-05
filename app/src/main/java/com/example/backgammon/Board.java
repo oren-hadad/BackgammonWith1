@@ -14,11 +14,10 @@ public class Board
     public Board(){
         eatenBlack = 0;
         eatenWhite = 0;
-        exitedWhite = 0;
-        exitedBlack = 0;
+        exitedWhite = 13;
+        exitedBlack = 13;
         locWhite = new int[24];
         locBlack = new int[24];
-
         locBlack[23] = 2;
         locWhite[0] = 2;
         locBlack[12] = 5;
@@ -27,21 +26,6 @@ public class Board
         locWhite[16] = 3;
         locBlack[5] = 5;
         locWhite[18] = 5;
-//        locBlack[0] = 3;
-//        locWhite[22] = 3;
-//        locBlack[1] = 5;
-//        locWhite[23] = 5;
-//        locBlack[2] = 5;
-//        locBlack[3] = 5;
-//        locWhite[21] = 5;
-//        locWhite[20] = 5;
-
-
-
-
-
-
-
     }
     public int[] getLocWhite(){
         return locWhite;
@@ -96,7 +80,7 @@ public class Board
 
     public void highlightSlot(int i,boolean isWhite, int numDice) {
         if (numDice == 0){
-         return;
+            return;
         }
         if (isWhite){
             highlightSlots[(i +  numDice)] = 1;
@@ -111,7 +95,6 @@ public class Board
         } else {
             highlightSlots[(numDice)] = 1;
         }
-
     }
 
     public int[] getHighlightedSlot() {
@@ -156,16 +139,15 @@ public class Board
     public boolean soldierCanReturn(boolean isWhite, int numDice1, int numDice2) {
         boolean canPlay = false;
         if(isWhite){
-                if(locBlack[numDice1-1] <= 1){
-                    highlightSlotToReturn(isWhite, numDice1-1);
-                    canPlay = true;
+            if(locBlack[numDice1-1] <= 1){
+                highlightSlotToReturn(isWhite, numDice1-1);
+                canPlay = true;
 
-                }
-                if(locBlack[numDice2-1] <= 1){
-                    highlightSlotToReturn(isWhite, numDice2-1);
-                    canPlay = true;
-                }
-
+            }
+            if(locBlack[numDice2-1] <= 1){
+                highlightSlotToReturn(isWhite, numDice2-1);
+                canPlay = true;
+            }
         }
         else{
             if(locWhite[24- numDice1] <= 1){
@@ -176,7 +158,6 @@ public class Board
                 highlightSlotToReturn(isWhite, 24-numDice2);
                 canPlay = true;
             }
-
         }
         return canPlay;
     }
@@ -250,24 +231,11 @@ public class Board
         }
         return false;
     }
-    public int nextWhiteSoldier(int soldierIndex) {
-        for (int i = soldierIndex + 1; i < locWhite.length; i++) {
-            if (locWhite[i] > 0) {
-                return i;
-            }
+    public boolean isGameOver(boolean isWhite) {
+        if (isWhite) {
+            return exitedWhite == 15;
+        } else {
+            return exitedBlack == 15;
         }
-        return 23; // No soldier found
     }
-    public int nextBlackSoldier(int soldierIndex) {
-        for (int i = soldierIndex + 1; i < locBlack.length; i++) {
-            if (locBlack[i] > 0) {
-                return i;
-            }
-        }
-        return -1; // No soldier found
-    }
-
-
-
-
 }

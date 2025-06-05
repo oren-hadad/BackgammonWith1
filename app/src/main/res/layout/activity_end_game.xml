@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/main"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3E2723"
+    android:padding="32dp">
+
+    <!-- כותרת -->
+    <TextView
+        android:id="@+id/endGameTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="End Game"
+        android:textSize="28sp"
+        android:textStyle="bold"
+        android:textColor="#FBE9E7"
+        android:gravity="center"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- כפתור Choose Mode -->
+    <Button
+        android:id="@+id/chooseModeButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Choose Mode"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="40dp"
+        android:padding="12dp"
+        android:elevation="4dp"
+        android:backgroundTint="#6D4C41"
+        app:layout_constraintTop_toBottomOf="@id/endGameTitle"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <!-- כפתור Leaderboard -->
+    <Button
+        android:id="@+id/leaderboardButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Leaderboard"
+        android:textAllCaps="false"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="24dp"
+        android:padding="12dp"
+        android:elevation="4dp"
+        android:backgroundTint="#6D4C41"
+        app:layout_constraintTop_toBottomOf="@id/chooseModeButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

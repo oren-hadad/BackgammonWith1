@@ -29,6 +29,7 @@
         android:textColor="#FFFFFF"
         android:textColorHint="#BCAAA4"
         android:background="@android:color/transparent"
+        android:backgroundTint="@android:color/transparent"
         android:paddingBottom="8dp"
         android:textSize="16sp"
         android:layout_marginTop="24dp"
@@ -38,6 +39,7 @@
         app:layout_constraintEnd_toEndOf="parent" />
 
     <View
+        android:id="@+id/emailUnderline"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="#795548"
@@ -55,15 +57,17 @@
         android:textColor="#FFFFFF"
         android:textColorHint="#BCAAA4"
         android:background="@android:color/transparent"
+        android:backgroundTint="@android:color/transparent"
         android:paddingBottom="8dp"
         android:textSize="16sp"
         android:layout_marginTop="24dp"
         android:importantForAutofill="yes"
-        app:layout_constraintTop_toBottomOf="@id/emailEditText"
+        app:layout_constraintTop_toBottomOf="@id/emailUnderline"
         app:layout_constraintStart_toStartOf="@id/emailEditText"
         app:layout_constraintEnd_toEndOf="@id/emailEditText" />
 
     <View
+        android:id="@+id/passwordUnderline"
         android:layout_width="0dp"
         android:layout_height="1dp"
         android:background="#795548"
@@ -76,14 +80,14 @@
         android:id="@+id/loginButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Login"
+        android:text="Register"
         android:textAllCaps="false"
         android:textColor="#FFFFFF"
         android:layout_marginTop="32dp"
         android:padding="12dp"
         android:elevation="4dp"
         android:backgroundTint="#6D4C41"
-        app:layout_constraintTop_toBottomOf="@id/passwordEditText"
+        app:layout_constraintTop_toBottomOf="@id/passwordUnderline"
         app:layout_constraintStart_toStartOf="@id/passwordEditText"
         app:layout_constraintEnd_toEndOf="@id/passwordEditText" />
 

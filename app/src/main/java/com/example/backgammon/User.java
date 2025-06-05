@@ -26,11 +26,7 @@ public class User {
     private String email;
     private int numOfGames;
 
-    public User(int coins, String email, int numOfGames){
-        this.email = email;
-        this.coins = 0;
-        this.numOfGames = 0;
-    }
+
 
 
     public User(String email) {
