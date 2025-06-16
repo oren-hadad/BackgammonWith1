@@ -7,6 +7,14 @@ public class User {
         this.email = email;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public int getCoins() {
         return coins;
     }
@@ -23,18 +31,22 @@ public class User {
         this.numOfGames = numOfGames;
     }
 
+
     private String email;
     private int numOfGames;
+    private String name;
 
 
 
-
-    public User(String email) {
+    public User(String email, String name) {
         this.email = email;
         this.coins = 0;
         this.numOfGames = 0;
+        this.name =  name;
 
 
+    }
+    public User() {
     }
 
     public String getEmail(){

@@ -8,7 +8,6 @@
     android:background="#3E2723"
     android:padding="32dp">
 
-    <!-- כותרת -->
     <TextView
         android:id="@+id/endGameTitle"
         android:layout_width="0dp"
@@ -22,7 +21,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- כפתור Choose Mode -->
     <Button
         android:id="@+id/chooseModeButton"
         android:layout_width="0dp"
@@ -38,7 +36,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- כפתור Leaderboard -->
     <Button
         android:id="@+id/leaderboardButton"
         android:layout_width="0dp"

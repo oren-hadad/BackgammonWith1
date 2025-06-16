@@ -14,18 +14,20 @@ public class Board
     public Board(){
         eatenBlack = 0;
         eatenWhite = 0;
-        exitedWhite = 0;
-        exitedBlack = 0;
+        exitedWhite = 10;
+        exitedBlack = 10;
         locWhite = new int[24];
         locBlack = new int[24];
-        locBlack[23] = 2;
-        locWhite[0] = 2;
-        locBlack[12] = 5;
-        locWhite[11] = 5;
-        locBlack[7] = 3;
-        locWhite[16] = 3;
-        locBlack[5] = 5;
-        locWhite[18] = 5;
+//        locBlack[23] = 2;
+//        locWhite[0] = 2;
+//        locBlack[12] = 5;
+//        locWhite[11] = 5;
+//        locBlack[7] = 3;
+//        locWhite[16] = 3;
+//        locBlack[5] = 5;
+//        locWhite[18] = 5;
+        locBlack[0] = 5;
+        locWhite[20] = 5;
     }
     public int[] getLocWhite(){
         return locWhite;

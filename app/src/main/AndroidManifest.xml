@@ -16,7 +16,7 @@
             android:name=".endGame"
             android:exported="false" />
         <activity
-            android:name=".leader_board"
+            android:name=".Leader_board"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"

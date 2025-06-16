@@ -34,7 +34,7 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
 
         // יצירת תצוגת הקוביות
 
-        CountDownTimer timer = new CountDownTimer(3000, 1000) {
+        CountDownTimer timer = new CountDownTimer(1000, 1000) {
             @Override
             public void onTick(long l) {
 
@@ -48,14 +48,6 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
         timer.start();
 
 
-//        if (diceRollingView.getParent() == null) {
-//            gameContainer.addView(diceRollingView);
-//        }
-//
-//        // 3. Start the animation
-//        diceRollingView.startAnimationSequence(first, second);
-
-        // לזמן פעולה של הקוביות שקובע של מי התור ומעדכן את התור
     }
 
     public void updateGame(){
@@ -121,8 +113,17 @@ public class GameManager implements DiceRollingSurfaceView.DiceAnimationListener
             if (tryToExitSoldier(soldierIndex)) {
                 if(board.isGameOver(isWhite)){
                     // אם המשחק נגמר, צריך להודיע על כך
+                    AppConsts.Winner = isWhite; // עדכון המנצח
+                    if(!board.canExit(!isWhite)){
+                        AppConsts.coins = 150;
+                    }
+                    else if(isWhite && board.getExitedWhite() == 0 || !isWhite && board.getExitedBlack() == 0){
+                        AppConsts.coins = 100;
+                    }
+                    else{
+                        AppConsts.coins = 50;
+                    }
                     Intent intent = new Intent(context, endGame.class);
-                    intent.putExtra("winner", isWhite ? "White" : "Black");
                     context.startActivity(intent);
                     board = new Board(); // איפוס הלוח למשחק חדש
                 }

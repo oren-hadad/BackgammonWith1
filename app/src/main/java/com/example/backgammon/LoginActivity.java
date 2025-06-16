@@ -36,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 EditText etMail = findViewById(R.id.emailEditText);
                 EditText etPassword = findViewById(R.id.passwordEditText);
+                EditText etName = findViewById(R.id.nameEditText);
 
                 if(TextUtils.isEmpty(etMail.getText()) || TextUtils.isEmpty(etPassword.getText()))
                 {
@@ -45,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 String Email =etMail.getText().toString();
                 String Password = etPassword.getText().toString();
+                String Name = etName.getText().toString();
 
                 mAuth.createUserWithEmailAndPassword(Email,Password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
@@ -55,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                             // create user object
                             // Add user to  FB
 
-                            User user = new User(Email);
+                            User user = new User(Email, Name);
 
                             FirebaseFirestore db = FirebaseFirestore.getInstance();
 

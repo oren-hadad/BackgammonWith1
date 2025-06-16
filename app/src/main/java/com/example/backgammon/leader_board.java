@@ -1,42 +1,63 @@
 package com.example.backgammon;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
-public class leader_board extends AppCompatActivity {
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 
-    @SuppressLint("MissingInflatedId")
+import java.util.List;
+
+public class Leader_board extends AppCompatActivity {
+
+    TextView[] players = new TextView[5]; // מערך של 5 טקסטים
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        EdgeToEdge.enable(this);
         setContentView(R.layout.activity_leader_board);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
 
-        // חיבור כפתור Back
+        // קישור ל־TextView-ים לפי ID
+        players[0] = findViewById(R.id.player1);
+        players[1] = findViewById(R.id.player2);
+        players[2] = findViewById(R.id.player3);
+        players[3] = findViewById(R.id.player4);
+        players[4] = findViewById(R.id.player5);
+
+        // איפוס טקסטים
+        for (int i = 0; i < players.length; i++) {
+            players[i].setText((i + 1) + " ...");
+        }
+
+        // טעינת המובילים מה־Firebase
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("users").orderBy("coins", Query.Direction.DESCENDING).limit(5).get().addOnSuccessListener(result -> {
+                    List<com.google.firebase.firestore.DocumentSnapshot> list = result.getDocuments();
+
+                    for (int i = 0; i < list.size(); i++) {
+                        String name = list.get(i).getString("name");
+                        long coins = list.get(i).getLong("coins");
+                        long numOfGames = list.get(i).getLong("numOfGames");
+
+                        String icon = ""; // אייקון מדליה
+                        if (i == 0) icon = "🥇 ";
+                        else if (i == 1) icon = "🥈 ";
+                        else if (i == 2) icon = "🥉 ";
+
+                        String text = icon + (i + 1) + " - " + name + " (" + coins + " Coins" + ", " + numOfGames + " Games)";
+                        players[i].setText(text);
+                    }
+                });
+
+        // כפתור חזרה
         Button backButton = findViewById(R.id.backButton);
-
-        // מאזין ללחיצה על כפתור Back
-        backButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(leader_board.this, endGame.class);
-                startActivity(intent);
-                finish(); // סגירת המחלקה הנוכחית
-            }
+        backButton.setOnClickListener(v -> {
+            startActivity(new Intent(this, endGame.class));
+            finish();
         });
     }
 }
